@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create User</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+</head>
+<body>
+
+    <form class="CreateUser">
+        <h2>Create A New User</h2>
+        <input type="text" class="username" placeholder="Username">
+        <input type="password" class="password" placeholder="Password">
+        <input type="submit" value="Create User"  >
+    </form>
+    <script>
+
+        const CreateUser = document.querySelector('.CreateUser')
+
+        CreateUser.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const username = CreateUser.querySelector('.username').value 
+            const password = CreateUser.querySelector ('.password').value 
+            $.post('/createUser', {username, password})
+        })
+    </script> 
+</body>
+</html>

@@ -1,0 +1,12 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+  link(href='./css/login.css', rel='stylesheet')
+block body
+  .container
+    form.form-signin(action='/login', method='POST')
+      h2.form-signin-heading Please sign in
+      label.sr-only(for='inputEmail') Username
+      input#inputEmail.form-control(type='text', name='username',placeholder='Username', required='', autofocus='')
+      label.sr-only(for='inputPassword') Password
+      input#inputPassword.form-control(type='password', name='password', placeholder='Password', required='')
+      button.btn.btn-lg.btn-primary.btn-block(type='submit', value='Login') Sign in

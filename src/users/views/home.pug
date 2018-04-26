@@ -1,0 +1,17 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+	// Custom styles for this template
+	link(href='./css/starter-template.css', rel='stylesheet')
+block body
+	+navbar-fixed("Experience Summer Work USA","navbar","inverse")
+		+nav_item("#","active") Home
+		+nav_item("/student") Profile
+		+nav_item("#") Application
+		+nav_item("/jobList") Job List
+		+nav_item("/listUsers") User List (Administrators)
+		+nav_item("/logout") Logout
+	.container
+		.starter-template
+			h1= welcome
+			p.lead
+				| Use the menu at the top to navigate to your destination

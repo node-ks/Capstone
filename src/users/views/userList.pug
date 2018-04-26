@@ -1,0 +1,55 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+	link(href='./css/userList.css', rel='stylesheet')
+block body  
+	nav.navbar.navbar-inverse.navbar-fixed-top
+		.container-fluid
+			.navbar-header
+				button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href='#') Experience Summer Work USA
+			#navbar.navbar-collapse.collapse
+				ul.nav.navbar-nav.navbar-right
+					li
+						a(href='#') Dashboard
+					li
+						a(href='#') Settings
+					li
+						a(href='#') Profile
+					li
+						a(href='#') Help
+				form.navbar-form.navbar-right
+					input.form-control(type='text', placeholder='Search...')
+	.container-fluid
+		.row
+			.col-xs-6.col-sm-6
+			| 	&nbsp
+			.col-xs-6.col-sm-6
+				br
+				br
+				br
+				h2.sub-header Users
+				.table-responsive
+					table.table.table-striped
+						thead
+							tr
+								th #
+								th Username
+								th Active
+								th Role Requested
+								th
+						tbody
+						each val in list.length ? list : ['There are no values']
+							tr
+								td= val.snum
+								td= val.UserName + " "
+								td= val.Active
+								td= val.RoleRequested
+								td 
+									a(href='/editUser/'+val.UserName) Edit 
+									a(href='/deleteUser/'+val.UserName) &nbsp Delete
+									a(href='/editUserRole/'+val.UserName) &nbsp Edit Role
+									

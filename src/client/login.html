@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+</head>
+<body>
+    <form class="Login">
+        <h2>Login</h2>
+        <input type="text" class="username" placeholder="Username">
+        <input type="password" class="password" placeholder="Password">
+        <input type="submit" value="Login">
+    </form>
+    <script>
+        const Login = document.querySelector('.Login')
+
+        Login.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            let username = Login.querySelector('.username').value 
+            let password = Login.querySelector ('.password').value 
+
+            $.post('/login', { username, password })
+                .done(function(data){
+                console.log('Login successful!')
+                window.location.href="/home"
+                })
+                .fail(function(){
+                    console.log('Login failed')
+                })
+        })    
+    </script> 
+</body>
+</html>
+
+<!-- html
+  head
+    title= title
+  body
+    h2= heading
+    form(action='/login', method='POST')
+      input(type='text', name='username', placeholder='Username')
+      input(type='password', name='password', placeholder='Password')
+      input(type='submit', value='Login')
+      a(href='/#') Cancel
+-->

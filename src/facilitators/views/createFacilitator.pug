@@ -1,0 +1,44 @@
+// Special version of Bootstrap that only affects content wrapped in .bootstrap-iso
+link(rel='stylesheet', href='https://formden.com/static/cdn/bootstrap-iso.css')
+h1 Create A New Facilitator
+// Inline CSS based on choices in "Settings" tab
+style.
+  .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}
+
+.bootstrap-iso
+  .container-fluid
+    .row
+      .col-md-6.col-sm-6.col-xs-12
+        form(action='/facilitator/createFacilitator', method='POST')
+          .form-group
+            label.control-label(for='name')
+              | First Name
+              span.asteriskField
+                | *
+            input#name.form-control(name='Fname', type='text')
+          .form-group
+            label.control-label(for='name')
+              | Middle Name
+            input#name.form-control(name='Mname', type='text')
+          .form-group
+            label.control-label(for='name')
+              | Last Name
+              span.asteriskField
+                | *
+            input#name.form-control(name='Lname', type='text')             
+          .form-group
+            label.control-label.requiredField(for='email')
+              | Email
+              span.asteriskField
+                | *
+            input#email.form-control(name='Email', type='text')
+          .form-group
+            label.control-label.requiredField(for='name')
+              | Phone
+              span.asteriskField
+                | 
+            input#email.form-control(name='Phone', type='text')
+          .form-group
+            div
+              button.btn.btn-primary(name='submit', type='submit')
+                | Submit

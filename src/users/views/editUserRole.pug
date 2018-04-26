@@ -1,0 +1,23 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+  link(href='./css/login.css', rel='stylesheet')
+  head
+    title= title
+  body
+  .container
+    form.form-signin(action='/editUserRole', method='POST')
+      h2.form-signin-heading Edit User Role
+      h4.form-signin-heading= 'Username: ' + username
+      br
+      h4.form-signin-heading= 'Select Role'
+      label.sr-only(for='inputEmail') User ID
+      input(type='hidden', name='userid', value=userid)
+      select#inputEmail.form-control(name='roleid')
+        option(value='') --Select user type--
+        option(value=0 selected='true') Student
+        option(value=1) Sponsor
+        option(value=2) Employer
+        option(value=3) Facilitator
+      br
+      button.btn.btn-lg.btn-primary.btn-block(type='submit', value='Save') Save
+      a(href='/listUsers') Cancel

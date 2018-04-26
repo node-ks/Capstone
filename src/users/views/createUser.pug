@@ -1,0 +1,25 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+  link(href='./css/login.css', rel='stylesheet')
+block body
+  .container
+    form.form-signin(action='/createUser', method='POST')
+      h2.form-signin-heading Create A New Account
+      label.sr-only(for='inputEmail') Email
+      input#inputEmail.form-control(type='text', name='Email',placeholder='Email', required='', autofocus='')
+      label.sr-only(for='inputEmail') Username
+      input#inputEmail.form-control(type='text', name='username',placeholder='Username', required='', autofocus='')
+      label.sr-only(for='inputPassword') Password
+      input#inputPassword.form-control(type='password', name='password', placeholder='Password', required='')
+      label.sr-only(for='inputPassword') Password
+      input#inputPassword.form-control(type='password', name='confirmPassword', placeholder='Confirm Password', required='') 
+      select#inputEmail.form-control(name='RoleRequested')
+        option(value='') --Select user type--
+        option(value=0 selected='true') Student
+        option(value=1) Sponsor
+        option(value=2) Employer
+        option(value=3) Facilitator
+      br
+      button.btn.btn-lg.btn-primary.btn-block(type='submit', value='Create') Create New Account
+      a(href='/listUsers') Cancel
+

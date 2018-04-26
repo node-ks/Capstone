@@ -1,0 +1,17 @@
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+  link(href='./css/login.css', rel='stylesheet')
+  head
+    title= title
+  body
+  .container
+    form.form-signin(action='/editUser', method='POST')
+      h2.form-signin-heading Edit User Information
+      h4.form-signin-heading= 'Username: ' + username
+      h4.form-signin-heading= 'Current Status: ' + active
+      h4.form-signin-heading= 'Role Requested: ' + rolerequested
+      label.sr-only(for='inputEmail') Student ID
+      input#inputEmail.form-control(type='hidden', name='username', value=username, placeholder='Enter Existing Username')
+      input#inputEmail.form-control(type='text', name='active', value='', placeholder='Enter A New Status ID: [ 0 ] = Inactive  [ 1 ] = Active')
+      button.btn.btn-lg.btn-primary.btn-block(type='submit', value='Save') Save
+      a(href='/listUsers') Cancel

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Node Database Tutorial</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> 
+</head>
+<body>
+<a href="login.html">Login</a>
+
+   <!--  <form class="Login">
+        <h1>Login</h1>
+        <input type="text" class="username" placeholder="username">
+        <input type="password" class="password" placeholder="password">
+        <input type="submit" value="Login">
+        <input type='button' id='submittor' value='submittor' />
+    </form>
+    <form class="CreateUser">
+        <h1>Create a new user</h1>
+        <input type="text" class="username" placeholder="username">
+        <input type="password" class="password" placeholder="password">
+        <input type="submit" value="Create user"  >
+    </form> -->
+    <script>
+        const CreateUser = document.querySelector('.CreateUser')
+
+        CreateUser.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const username = CreateUser.querySelector('.username').value 
+            const password = CreateUser.querySelector ('.password').value 
+            post('/createUser', {username, password})
+        })
+
+        const Login = document.querySelector('.Login')
+
+//      Login code
+        $(document).ready(function(){
+            $('#submittor').click(function(){
+                
+
+            })
+        })
+//      End of login code
+
+        Login.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            let username = Login.querySelector('.username').value 
+            let password = Login.querySelector ('.password').value 
+
+            $.post('/login', { username, password })
+                .done(function(data){
+                console.log('login successful')
+                window.location.href="/home"
+                })
+                .fail(function(){
+                    console.log('login failed')
+                })
+
+/*             const username = Login.querySelector('.username').value
+            const password = Login.querySelector('.password').value
+
+
+
+        post('/login', { username, password })
+            .then((response) => {
+                console.log("response", response)
+            if (response.status === 200) {
+                window.location.href="/home"
+                //window.location.assign('/home')
+                //alert('Login success!')
+                //window.location.assign('/home')
+                }
+            else alert('Login failed ( ͡° ͜ʖ ͡°)')
+            }) */
+        })
+
+        function post (path, data) {
+
+            return window.fetch(path, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                //body: JSON.stringify(data)
+            })
+        }    
+    
+    </script> 
+</body>
+</html>
