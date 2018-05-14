@@ -211,18 +211,17 @@ router.post('/editUser', (req, res) => {
 router.get('/editUserRole/:username', (req,res) =>{
     if (req.session_state.username) {
         store.getUser(req.params.username).then(data => {
+            console.dir(data)
+            var userIdInt = Number(data[0].UserId)
+            console.log(userIdInt)
             if (data.length > 0) {
-                console.dir(data[0])
+                 console.dir(data[0])
                 res.render(require.resolve('../views/editUserRole.pug'),
                         {
                         title:'Edit User Role',
                         username: data[0].UserName,
-                        studentId: data[0].StudentId,
-                        active: data[0].Active,
-                        rolerequested: data[0].RoleRequested,
-                        userid: data[0].UserId,
-                        roleid: data[0].RoleId
-                        }) 
+                        userid: data[0].UserId
+                        })  
             }
             else {
                 res.send('Student does not exist')
@@ -235,31 +234,32 @@ router.get('/editUserRole/:username', (req,res) =>{
     
 })
 router.post('/editUserRole', (req, res) => {
-    let roleid = req.body.roleid
-    let userid = req.body.userid
-    console.log('Edit User Role')
+    let roleid = Number(req.body.roleid)
+    let userid = Number(req.body.userid)
+    console.log(`Edit User Role with role ID: ${roleid} and user id: ${userid} ` )
     store.editUserRole({
             roleid,
             userid
         })
     store.getUserById(userid).then((user) => {
         console.log('Role ID: ', roleid, 'Student ID: ', user.studentId)
-        if (roleid === '0' && user.studentId == null) {
+        if (roleid === 0 && user.studentId == null) {
             console.log('Calling create student...')
             studentStore.createStudent({}).then(
-                (student)=>{
-                    console.dir(student)
+                (studentIdArray)=>{
+                    console.dir(studentIdArray)
+                    console.log(`Log student from getUserById POST Route. Student id id: ${studentIdArray[0]}`)
                     store.editUserProfileId({
                         userid:userid,
-                        studentId: student.StudId
-                    })
+                        studentId:studentIdArray[0]
+                    }).then()
                 }
             )
         }
     })
     
     
-     //  res.redirect('/listUsers')
+       res.redirect('/listUsers')
 })
 
 module.exports = router

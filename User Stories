@@ -13,8 +13,8 @@ User Stories
 8. As a Student, I need to see the Jobs posted, so that I can apply for it and submit the required documents.
 9. As an Employer, I need the ability to review a Job application, so I can approve it.
 
-10. As a Student, I need the ability to submit Immigration documents, so the Facilitator can access them.
-11. As a Facilitator, I need the ability to access the Immigration documents of a student, so I can update the Immigration status.
+10. As a Student, I need the ability to submit visa documents, so the Facilitator can access them.
+11. As a Facilitator, I need the ability to access the visa documents of a student, so I can update the program status.
 
 ------
 User Story 1:

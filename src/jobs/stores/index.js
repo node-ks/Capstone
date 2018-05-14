@@ -10,13 +10,14 @@ const knex = require('knex')(require('../../knexfile'))
         deleteJob:deleteJob
     }
 
-  function createJob ({ JobId, EmpId, JobTitle, JobDescr, JobLocation, PayRate}) {
+  function createJob ({EmpId,JobTitle, JobDescr, JobLocation, PayRate, Status}) {
     return knex('JOB').insert({
-        JobId:JobId,
         EmpId:EmpId,
         JobTitle:JobTitle,
         JobDescr:JobDescr,
         Location:JobLocation,
+        PayRate:PayRate,
+        Status:Status
     })
   }
 
@@ -37,22 +38,23 @@ const knex = require('knex')(require('../../knexfile'))
                         'JobTitle',
                         'JobDescr',
                         'Location',
-                        'PayRate'
+                        'PayRate',
+                        'Status'
                         )
                 .where({JobId:JobId})
   }
 
   /** EDIT JOB */
-  function editJob({JobId, EmpId, JobTitle, JobDescr, JobLocation, Payrate}) {
+  function editJob({JobTitle, JobDescr, JobLocation, PayRate, Status}) {
     return knex.table('JOB')
         .where({JobId:JobId})
         .update(
             {   
-                EmpId:EmpId,
-                JobTitle:JobTitle,
-                JobDescr:JobDescr,
-                Location:JobLocation,
-                PayRate:PayRate
+              JobTitle:JobTitle,
+              JobDescr:JobDescr,
+              Location:JobLocation,
+              PayRate:PayRate,
+              Status:Status
             }) 
         .then(data => data) 
   }

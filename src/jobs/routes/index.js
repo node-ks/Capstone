@@ -116,7 +116,8 @@ router.post('/createJob', (req, res) => {
             JobTitle: req.body.JobTitle,
             JobDescr: req.body.JobDescr,
             Location: req.body.JobLocation,
-            PayRate: req.body.Phone
+            PayRate: req.body.Phone,
+            Status: req.body.Status
             })
         .then(() => res.redirect('/job/listJobs'))
 })
@@ -140,7 +141,8 @@ router.get('/deleteJob/:JobId', (req, res) => {
                             JobTitle: data[0].JobTitle,
                             JobDescr: data[0].JobDescr,
                             Location: data[0].JobLocation,
-                            PayRate: data[0].PayRate
+                            PayRate: data[0].PayRate,
+                            Status: data[0].Status
                             }) 
             }
             else {
@@ -176,7 +178,8 @@ router.get('/editJob/:JobId', (req,res) =>{
                             JobTitle: data[0].JobTitle,
                             JobDescr: data[0].JobDescr,
                             Location: data[0].JobLocation,
-                            PayRate: data[0].PayRate
+                            PayRate: data[0].PayRate,
+                            Status: data[0].Status
                         }) 
             }
             else {
@@ -196,7 +199,8 @@ router.post('/editJob', (req, res) => {
         JobTitle: req.body.JobTitle,
         JobDescr: req.body.JobDescr,
         Location: req.body.JobLocation,
-        PayRate: req.body.PayRate
+        PayRate: req.body.PayRate,
+        Status: req.body.Status
         })
        .then((data) => {
            res.redirect('/job/listJobs')

@@ -12,7 +12,8 @@ const knex = require('knex')(require('../../knexfile'))
         editUser:editUser,
         deleteUser:deleteUser,
         editUserRole:editUserRole,
-        getUserById:getUserById
+        getUserById:getUserById,
+        editUserProfileId:editUserProfileId
     }
 
   function createUser ({ username, password, RoleRequested }) {
@@ -86,13 +87,18 @@ const knex = require('knex')(require('../../knexfile'))
         .then(data => data) 
   }
 
-  /** EDIT USER STUDENT ID */
+
+  /*DELETE FUNCTION */
+
+  /** EDIT USER TABLE USER TYPE ID */
   function editUserProfileId({userid, studentId, sponsorId, employerId, facilitatorId}) {
+    console.log('Edit User Profile ID called...')
     return knex.table('USER')
     .where({UserId:userid})
     .update({StudentId:studentId, SponsorId:sponsorId, EmployerId:employerId, FacilitatorId:facilitatorId})
     .then(data => data)
   }
+
 
 /** DELETE USER */
   function deleteUser ({username, studentId}) {
@@ -102,6 +108,8 @@ const knex = require('knex')(require('../../knexfile'))
         .del()
         .then(data => data)
   }
+
+/*DELETE THIS FUNCTION  */
 /** EDIT USER ROLE (FACILITATOR FUNCTION) */
   function editUserRole ({userid, roleid}) {
     knex.from('USER_ROLE')
@@ -124,4 +132,4 @@ const knex = require('knex')(require('../../knexfile'))
                 }
               })
 
-  }
+  } 

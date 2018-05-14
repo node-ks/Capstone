@@ -11,7 +11,7 @@ const knex = require('knex')(require('../../knexfile'))
     }
 
   function createStudent ({Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId }) {
-    console.log(`Add user ${Fname, Lname}`)
+    console.log(`Add student ${Fname, Lname}`)
     return knex('STUDENT').insert({
         Fname:Fname,
         Mname:Mname,

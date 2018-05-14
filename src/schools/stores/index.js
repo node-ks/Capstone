@@ -3,64 +3,64 @@ const knex = require('knex')(require('../../knexfile'))
 //(require('  ./knexfile'))
 
     module.exports = {
-        createFacilitator:createFacilitator,
-        getFacilitators:getFacilitators,
-        getFacilitator:getFacilitator,
-        editFacilitator:editFacilitator,
-        deleteFacilitator:deleteFacilitator
+        createSchool:createSchool,
+        getSchools:getSchools,
+        getSchool:getSchool,
+        editSchool:editSchool,
+        deleteSchool:deleteSchool
     }
 
-  function createFacilitator ({ FacId, Fname, Mname, Lname, Email, Phone}) {
-    return knex('FACILITATOR').insert({
-        Fname:Fname,
-        Mname:Mname,
-        Lname:Lname,
+  function createSchool ({SchName, SchAddress, Phone, Email, Rep}) {
+    return knex('SCHOOL').insert({
+        SchName:SchName,
+        SchAddress:SchAddress,
+        Phone:Phone,
         Email:Email,
-        Phone:Phone
+        Rep:Rep
     })
   }
 
-/** GET ALL FACILITATORS */
-  function getFacilitators () {
-    return knex.table('FACILITATOR')
+/** GET ALL SCHOOLS */
+  function getSchools () {
+    return knex.table('SCHOOL')
     .then(function(data) {
       var result = data //JSON.stringify(data);
       return result;
     });
   }
 
-  /** GET SINGLE FACILITATOR */
-  function getFacilitator (FacId) {
-    return knex.from('FACILITATOR')
-                .select('FacId',
-                        'Fname',
-                        'Mname',
-                        'Lname',
+  /** GET SINGLE SCHOOL */
+  function getSchool (SchId) {
+    return knex.from('SCHOOL')
+                .select('SchId',
+                        'SchName',
+                        'SchAddress',
+                        'Phone',
                         'Email',
-                        'Phone'
+                        'Rep'
                         )
-                .where({FacId:FacId})
+                .where({JobId:JobId})
   }
 
-  /** EDIT FACILITATOR */
-  function editFacilitator({FacId, Fname, Mname, Lname, Email, Phone}) {
-    return knex.table('FACILITATOR')
-        .where({FacId:FacId})
+  /** EDIT SCHOOL */
+  function editSchool({SchName, SchAddress, Phone, Email, Rep}) {
+    return knex.table('SCHOOL')
+        .where({SchId:SchId})
         .update(
             {   
-                Fname:Fname,
-                Mname:Mname,
-                Lname:Lname,
-                Email:Email,
-                Phone:Phone
+              SchName:SchName,
+              SchAddress:SchAddress,
+              Phone:Phone,
+              Email:Email,
+              Rep:Rep
             }) 
         .then(data => data) 
   }
 
-/** DELETE FACILITATOR */
-  function deleteFacilitator ({FacId}) {
-    return knex.table('FACILITATOR')
-        .where({FacId:FacId})
+/** DELETE SCHOOL */
+  function deleteSchool ({SchId}) {
+    return knex.table('SCHOOL')
+        .where({SchId:SchId})
         .del()
         .then(data => data)
   }

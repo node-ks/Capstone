@@ -58,17 +58,17 @@ router.get('/home', (req,res) => {
     }
 })
 
-/* ======================================= */
-/**      G E T   F A C I L I T A T O R S   */
-/* ======================================= */
+/* =============================== */
+/**      G E T   S C H O O L S     */
+/* =============================== */
 
-/** GET route - listFacilitators */
-router.get('/listFacilitators', (req,res) => {
+/** GET route - listJobs */
+router.get('/listSchools', (req,res) => {
 
     if (req.session_state.username) {
-        store.getFacilitators().then(data => {
+        store.getSchools().then(data => {
             data.map((val, index) => val.snum = index + 1)
-            res.render(require.resolve('../views/facilitatorList.pug'),
+            res.render(require.resolve('../views/schoolList.pug'),
                         {
                         list:data
                         }) 
@@ -80,9 +80,9 @@ router.get('/listFacilitators', (req,res) => {
 }) 
 
 /** GET route - getFacilitator/:FacId */
-router.get('/getFacilitator/:FacId', (req,res) =>{
+router.get('/getSchool/:SchId', (req,res) =>{
     if (req.session_state.username) {
-        store.getEmployer(req.params.FacId).then(data => {
+        store.getSchool(req.params.SchId).then(data => {
             // TODO: What is supposed to be here??
         })
     }
@@ -92,14 +92,14 @@ router.get('/getFacilitator/:FacId', (req,res) =>{
 })
 
 
-/* ============================================ */
-/**      C R E A T E   F A C I L I T A T O R S   */
-/* ============================================ */
+/* ================================== */
+/**      C R E A T E   S C H O O L    */
+/* ================================== */
 
 /** GET route */
-router.get('/createFacilitator', (req,res) => { 
+router.get('/createSchool', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createFacilitator.pug'),
+        res.render(require.resolve('../views/createSchool.pug'),
         )   
     }
     else {
@@ -108,41 +108,45 @@ router.get('/createFacilitator', (req,res) => {
 })
 
 /* POST route */
-router.post('/createFacilitator', (req, res) => {
+router.post('/createSchool', (req, res) => {
     //console.log('POST method called')
     store
         .createFacilitator({
-            Fname: req.body.Fname,
-            Mname: req.body.Mname,
-            Lname: req.body.Lname,
+            SchId: req.body.SchId,
+            SchName: req.body.SchName,
+            SchAddress: req.body.SchAddress,
+            Phone: req.body.Phone,
             Email: req.body.Email,
-            Phone: req.body.Phone
+            Rep: req.body.Rep
             })
-        .then(() => res.redirect('/facilitator/listFacilitators'))
+        .then(() => res.redirect('/school/listSchools'))
 })
 
-/* ============================================= */
-/**      D E L E T E   F A C I L I T A T O R S   */
-/* ============================================= */
+/* =================================== */
+/**      D E L E T E   S C H O O L     */
+/* =================================== */
 
 /** Delete Facilitator */
-router.get('/deleteFacilitator/:FacId', (req, res) => {
+router.get('/deleteSchool/:SchId', (req, res) => {
     if (req.session_state.username) {
-        store.getFacilitator(req.params.FacId).then(data => {
+        store.getSchool(req.params.SchId).then(data => {
 
             if (data.length > 0) {
-                res.render(require.resolve('../views/deleteFacilitator.pug'),
+                res.render(require.resolve('../views/deleteSchool.pug'),
                             {
-                            title:'Delete Facilitator',
-                            heading: 'Delete Facilitator From Database',
-                            FacId: data[0].FacId,
-                            Fname: data[0].Fname,
-                            Lname: data[0].Lname,
-                            Email: data[0].Email
+                            title:'Delete School',
+                            heading: 'Delete School From Database',
+                            SchId: data[0].SchId,
+                            EmpId: data[0].EmpId,
+                            SchName: data[0].SchName,
+                            SchAddress: data[0].SchAddress,
+                            Phone: data[0].Phone,
+                            Email: data[0].Email,
+                            Rep: data[0].Rep
                             }) 
             }
             else {
-                res.send('Facilitator does not exist')
+                res.send('School does not exist')
             }
         }) 
     }
@@ -151,34 +155,35 @@ router.get('/deleteFacilitator/:FacId', (req, res) => {
     }
 })
 
-router.post('/deleteFacilitator', (req, res) => {
-store.deleteFacilitator({
-        FacId: req.body.FacId
+router.post('/deleteSchool', (req, res) => {
+store.deleteSchool({
+        SchId: req.body.SchId
     })
-   .then(() => res.redirect('/facilitator/listFacilitators'))
+   .then(() => res.redirect('/schools/listSchools'))
 })
 
-/* =========================================== */
-/**      E D I T    F A C I L I T A T O R S    */
-/* =========================================== */
+/* ================================= */
+/**      E D I T    S C H O O L S    */
+/* ================================= */
 
-/** Edit Facilitator */
-router.get('/editFacilitator/:FacId', (req,res) =>{
+/** Edit School */
+router.get('/editSchool/:SchId', (req,res) =>{
     if (req.session_state.username) {
-        store.getFacilitator(req.params.FacId).then(data => {
+        store.getSchool(req.params.SchId).then(data => {
             if (data.length > 0) {
-                res.render(require.resolve('../views/editFacilitator.pug'),
+                res.render(require.resolve('../views/editSchool.pug'),
                         {
-                            FacId: data[0].FacId,
-                            Fname: data[0].Fname,
-                            Mname: data[0].Mname,
-                            Lname: data[0].Lname,
+                            SchId: data[0].SchId,
+                            EmpId: data[0].EmpId,
+                            SchName: data[0].SchName,
+                            SchAddress: data[0].SchAddress,
+                            Phone: data[0].Phone,
                             Email: data[0].Email,
-                            Phone: data[0].Phone
+                            Rep: data[0].Rep
                         }) 
             }
             else {
-                res.send('Facilitator does not exist')
+                res.send('School does not exist')
             }
         }) 
     }
@@ -187,17 +192,18 @@ router.get('/editFacilitator/:FacId', (req,res) =>{
     }
     
 })
-router.post('/editFacilitator', (req, res) => {
-    store.editFacilitator({
-        FacId: req.body.FacId,
-        Fname: req.body.Fname,
-        Mname: req.body.Mname,
-        Lname: req.body.Lname,
+router.post('/editSchool', (req, res) => {
+    store.editSchool({
+        SchId: req.body.SchId,
+        EmpId: req.body.EmpId,
+        SchName: req.body.SchName,
+        SchAddress: req.body.SchAddress,
+        Phone: req.body.Phone,
         Email: req.body.Email,
-        Phone: req.body.Phone
+        Rep: req.body.Rep
         })
        .then((data) => {
-           res.redirect('/facilitator/listFacilitators')
+           res.redirect('/school/listSchools')
         })
 })
 module.exports = router
