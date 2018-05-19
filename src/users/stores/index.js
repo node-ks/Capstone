@@ -13,7 +13,8 @@ const knex = require('knex')(require('../../knexfile'))
         deleteUser:deleteUser,
         editUserRole:editUserRole,
         getUserById:getUserById,
-        editUserProfileId:editUserProfileId
+        editUserProfileId:editUserProfileId,
+        getRoleByUserId:getRoleByUserId
     }
 
   function createUser ({ username, password, RoleRequested }) {
@@ -68,13 +69,13 @@ const knex = require('knex')(require('../../knexfile'))
   /** GET SINGLE USER */
   function getUser (username) {
     return knex.from('USER')
-                .select('StudentId', 'UserName', 'Active', 'RoleRequested', 'UserId')
+                .select('PersonId', 'UserName', 'Active', 'RoleRequested', 'UserId')
                 .where({UserName:username})
   }
   /** GET USER BY ID */
   function getUserById (userid) {
     return knex.table('USER')
-               .select('UserId', 'UserName', 'StudentId', 'StudentId', 'SponsorId', 'EmployerId', 'FacilitatorId')
+               .select('UserId', 'UserName', 'PersonId')
                .where({UserId:userid})
                .then(data => data)
   }
@@ -91,17 +92,17 @@ const knex = require('knex')(require('../../knexfile'))
   /*DELETE FUNCTION */
 
   /** EDIT USER TABLE USER TYPE ID */
-  function editUserProfileId({userid, studentId, sponsorId, employerId, facilitatorId}) {
+  function editUserProfileId({userid, personId}) {
     console.log('Edit User Profile ID called...')
     return knex.table('USER')
     .where({UserId:userid})
-    .update({StudentId:studentId, SponsorId:sponsorId, EmployerId:employerId, FacilitatorId:facilitatorId})
+    .update({PersonId:personId})
     .then(data => data)
   }
 
 
 /** DELETE USER */
-  function deleteUser ({username, studentId}) {
+  function deleteUser ({username, personId}) {
     console.log('Delete User Function')
     return knex.table('USER')
         .where({UserName:username})
@@ -132,4 +133,12 @@ const knex = require('knex')(require('../../knexfile'))
                 }
               })
 
-  } 
+  }
+  /** GET USER ROLE BY USER ID */
+  function getRoleByUserId (userid) {
+    return knex.table('USER_ROLE')
+               .select('RoleId', 'UserId')
+               .where({UserId:userid})
+               .then(data => data)
+  }
+ 

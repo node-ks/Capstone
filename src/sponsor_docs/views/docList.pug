@@ -31,43 +31,25 @@ block body
 				br
 				br
 				br
-				h2.sub-header Students
+				h2.sub-header Sponsor Documents
 				.table-responsive
 					table.table.table-striped
 						thead
 							tr
 								th #
-								th First Name
-								th Middle Name
-								th Last Name
-								th Gender
-								th Address
-								th D.O.B
-								th Phone
-								th GPA
-								th Email
-								th School ID
+								th Document Title
+								th Document Description
 								th Sponsor ID
-								th Job ID
-								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
 								td= val.snum
-								td= val.Fname 
-								td= val.Mname
-								td= val.Lname
-								td= val.Gender
-								td= val.StudAddress
-								td= val.Dob
-								td= val.Phone
-								td= val.Gpa
-								td= val.Email
-								td= val.SchoolId
-								td= val.SponsorId
-								td= val.JobId
-								td
+								td= val.DocTitle 
+								td= val.DocDescr
+								td= val.SpnId
 
-									a(href='/student/editStudent/'+val.StudId) Edit 
-									a(href='/student/deleteStudent/'+val.StudId) &nbsp Delete
+									a(href='/sponsor_docs/editDoc/'+val.DocId)  Edit  
+									a(href='/sponsor_docs/deleteDoc/'+val.DocId) &nbsp Delete
+				a(href='/sponsor_docs/createDoc/') &nbsp Create New Document
+				
 									

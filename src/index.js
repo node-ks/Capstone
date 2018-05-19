@@ -11,6 +11,7 @@ const employerRouter = require('./employers/routes')
 const facilitatorRouter = require('./facilitators/routes')
 const jobRouter = require('./jobs/routes')
 const schoolRouter = require('./schools/routes')
+const sponsorDocRouter = require('./sponsor_docs/routes')
 
 const clientSessions = require("client-sessions");
 
@@ -35,8 +36,9 @@ app.use('/employer', employerRouter)
 app.use('/facilitator', facilitatorRouter)
 app.use('/job', jobRouter)
 app.use('/school', schoolRouter)
+app.use('/sponsor_docs', sponsorDocRouter)
 
 app.use(express.static('public'))
-app.listen(7556, () => {
-    console.log('Server running on http://localhost:7556')
+app.listen(7555, () => {
+    console.log('Server running on http://localhost:7555')
 })

@@ -1,6 +1,6 @@
 // Special version of Bootstrap that only affects content wrapped in .bootstrap-iso
 link(rel='stylesheet', href='https://formden.com/static/cdn/bootstrap-iso.css')
-h1 Edit Your Sponsor Profile
+h1 Add A New Document
 // Inline CSS based on choices in "Settings" tab
 style.
   .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}
@@ -9,31 +9,20 @@ style.
   .container-fluid
     .row
       .col-md-6.col-sm-6.col-xs-12
-        form(action='/sponsor/editSponsor', method='POST')
+        form(action='/sponsor_docs/createDoc', method='POST')
           input(name='SpnId', type='hidden', value=SpnId)
-          input(name='redirectFlag', type='hidden', value=redirectFlag)
           .form-group
             label.control-label(for='name')
-              | First Name
+              | Document Title
               span.asteriskField
                 | *
-            input#name.form-control(name='SpnName', type='text', value=SpnName)
+            input#name.form-control(name='DocTitle', type='text')
           .form-group
             label.control-label(for='name')
-              | Address
+              | Document Description
               span.asteriskField
                 | *
-            input#name.form-control(name='SpnAddress', type='text', value=SpnAddress)  
-          .form-group
-            label.control-label(for='name')
-              | Phone Number
-            input#name.form-control(name='Phone', type='text', value=Phone)            
-          .form-group
-            label.control-label.requiredField(for='email')
-              | Email
-              span.asteriskField
-                | *
-            input#email.form-control(name='Email', type='text', value=Email)
+            input#name.form-control(name='DocDescr', type='text')
           .form-group
             div
               button.btn.btn-primary(name='submit', type='submit')

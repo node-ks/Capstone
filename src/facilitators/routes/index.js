@@ -2,6 +2,7 @@
 var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
+const userStore = require('../../users/stores')
 
 /* ===================== */
 /**      L O G I N       */
@@ -196,8 +197,52 @@ router.post('/editFacilitator', (req, res) => {
         Email: req.body.Email,
         Phone: req.body.Phone
         })
-       .then((data) => {
+        .then((data) => {
+            console.dir(data)
+            let redirectFlag = Number(req.body.redirectFlag)
+            if (redirectFlag == 0) {
            res.redirect('/facilitator/listFacilitators')
+           }
+           else if (redirectFlag == 1 ) {
+               res.redirect('/home')
+           }
+           else {
+            res.send('Unauthorized')
+           }
         })
+})
+/* ============================================================= */
+/**      E D I T     C U R R E N T    F A C I L I T A T O R S    */
+/* ============================================================= */
+
+/** Edit Facilitator */
+router.get('/editCurrentFacilitator', (req,res) =>{
+    if (req.session_state.username) {
+        userStore.getUser(req.session_state.username).then(users => {
+            //console.dir(users[0])
+            store.getFacilitator(users[0].PersonId).then(data => {
+            if (data.length > 0) {
+                //console.dir(data)
+                res.render(require.resolve('../views/editFacilitator.pug'),
+                        {
+                            FacId: data[0].FacId,
+                            Fname: data[0].Fname,
+                            Mname: data[0].Mname,
+                            Lname: data[0].Lname,
+                            Email: data[0].Email,
+                            Phone: data[0].Phone,
+                            redirectFlag:1
+                        }) 
+            }
+            else {
+                res.send('Facilitator does not exist')
+                }
+            })
+        })    
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+    
 })
 module.exports = router

@@ -1,11 +1,13 @@
-
-
 // get an instance of router
 var router = require('express').Router();
 
 var path    = require('path');
 const store = require('../stores')
 const studentStore = require('../../students/stores')
+const sponsorStore = require('../../sponsors/stores')
+const employerStore = require('../../employers/stores')
+const facilitatorStore = require('../../facilitators/stores')
+const roleStore = require('../../roles/stores')
 /* ===================== */
 /**      L O G I N       */
 /* ===================== */
@@ -18,17 +20,41 @@ router.get('/login', (req,res) => {
 /** POST route */
 router.post('/login', (req, res) => {
     // 1. Authenticate
-    console.dir(req.body)
     store.authenticate({
         username: req.body.username,
         password: req.body.password
     })
       .then(({ success }) => {
-        console.dir(success)  
+        //console.dir(success)  
         if (success) {
     // 2. Successful? Yes, set cookie
             req.session_state.username = req.body.username;
+
+            /** Get user role */
+            if (req.session_state.username) {
+                store.getUser(req.session_state.username).then(users => {
+                    //console.dir(users[0])
+                    store.getRoleByUserId(users[0].UserId).then(UserRole => {
+                        //console.log(UserRole)
+                        req.session_state.roleId = UserRole[0].RoleId
+                        //console.log(req.session_state.roleId)
+                        if (req.session_state.roleId === 1){
+                            sponsorStore.getSponsor(users[0].PersonId).then(Sponsor =>{
+                                req.session_state.spnId = Sponsor[0].SpnId
+                                //console.dir(req.session_state)
+                                res.redirect('/home')
+                            })
+                        } 
+                    else {   
+                    res.redirect('/home')
+                    }
+                    })
+                })
+        
+            }
+            else {
             res.redirect('/home');
+            }
         }
         else res.sendStatus(401)
       })
@@ -41,7 +67,7 @@ router.post('/login', (req, res) => {
 /** GET route */
 router.get('/logout', (req,res)=>{
     req.session_state.reset();
-    res.redirect('/home');
+    res.redirect('/login');
 })
 /* =========================== */
 /**      W E L C O M E         */
@@ -51,10 +77,30 @@ router.get('/logout', (req,res)=>{
 router.get('/home', (req,res) => {
 
     if (req.session_state.username) {
-            res.render(require.resolve('../views/home.pug'),
-                        {
-                            welcome: 'Welcome ' + req.session_state.username
-                        })
+        /**Sets edit profile option based on the type of user in the '/home' route for the 'PROFILE' button on the navbar  */
+        let profileRole = req.session_state.roleId
+        console.log('Profile Role: '+profileRole)
+        //console.log(req.session_state.roleId)
+        if (profileRole === 0) {
+            profileView = '/student/editCurrentStudent'
+        }
+        else if (profileRole === 1) {
+            profileView = '/sponsor/editCurrentSponsor'
+        }
+        else if (profileRole === 2) {
+            profileView = '/employer/editCurrentEmployer'
+        }
+        else if (profileRole === 3) {
+            profileView = '/facilitator/editCurrentFacilitator'
+        }
+        else {
+            res.send('profileRole err: Role does not exist.')
+        } 
+    res.render(require.resolve('../views/home.pug'),
+        {
+            welcome: 'Welcome ' + req.session_state.username,
+            profileRole:profileRole
+        })
     }
     else {
         res.render(require.resolve('../views/loginError.pug'))
@@ -177,7 +223,7 @@ router.get('/editUser/:username', (req,res) =>{
                         {
                         title:'Edit User',
                         username: data[0].UserName,
-                        studentId: data[0].StudentId,
+                        personId: data[0].PersonId,
                         active: data[0].Active,
                         rolerequested: data[0].RoleRequested
                         }) 
@@ -195,7 +241,7 @@ router.get('/editUser/:username', (req,res) =>{
 router.post('/editUser', (req, res) => {
     store.editUser({
             username: req.body.username,
-            studentId: req.body.studentId,
+            personId: req.body.personId,
             active: req.body.active,
             rolerequested: req.body.RoleRequested
         })
@@ -241,25 +287,71 @@ router.post('/editUserRole', (req, res) => {
             roleid,
             userid
         })
+    
+    //Check if student exists, if not create an empty student row in STUDENT table.
     store.getUserById(userid).then((user) => {
-        console.log('Role ID: ', roleid, 'Student ID: ', user.studentId)
-        if (roleid === 0 && user.studentId == null) {
+        console.log('Role ID: ', roleid, 'Student ID: ', user.personId)
+
+        if (roleid === 0 && user.personId == null) {
             console.log('Calling create student...')
             studentStore.createStudent({}).then(
-                (studentIdArray)=>{
-                    console.dir(studentIdArray)
-                    console.log(`Log student from getUserById POST Route. Student id id: ${studentIdArray[0]}`)
+                (personIdArray)=>{
+                    console.dir(personIdArray)
+                    console.log(`Log student from getUserById POST Route. Student id: ${personIdArray[0]}`)
                     store.editUserProfileId({
                         userid:userid,
-                        studentId:studentIdArray[0]
+                        personId:personIdArray[0]
                     }).then()
                 }
             )
         }
-    })
-    
-    
+        //Check if sponsor exists, if not create an empty student row in SPONSOR table.
+        else if (roleid === 1 && user.personId == null) {
+            console.log('Calling create sponsor...')
+            sponsorStore.createSponsor({}).then(
+                (personIdArray)=>{
+                    console.dir(personIdArray)
+                    console.log(`Log sponsor from getUserById POST Route. Sponsor id: ${personIdArray[0]}`)
+                    store.editUserProfileId({
+                        userid:userid,
+                        personId:personIdArray[0]
+                    }).then()
+                }
+            )
+        }
+        //Check if employer exists, if not create an empty employer row in EMPLOYER table.
+        else if (roleid === 2 && user.personId == null) {
+            console.log('Calling create employer...')
+            employerStore.createEmployer({}).then(
+                (personIdArray)=>{
+                    console.dir(personIdArray)
+                    console.log(`Log employer from getUserById POST Route. Sponsor id: ${personIdArray[0]}`)
+                    store.editUserProfileId({
+                        userid:userid,
+                        personId:personIdArray[0]
+                    }).then()
+                }
+            )
+        }
+        //Check if facilitator exists, if not create an empty facilitator row in EMPLOYER table.
+        else if (roleid === 3 && user.personId == null) {
+            console.log('Calling create facilitator...')
+            facilitatorStore.createFacilitator({}).then(
+                (personIdArray)=>{
+                    console.dir(personIdArray)
+                    console.log(`Log sponsor from getUserById POST Route. Sponsor id: ${personIdArray[0]}`)
+                    store.editUserProfileId({
+                        userid:userid,
+                        personId:personIdArray[0]
+                    }).then()
+                }
+            )
+        }
+        else {
+            res.send("Role doesn't exist!")
+        }
        res.redirect('/listUsers')
-})
-
+        })
+    }
+)
 module.exports = router

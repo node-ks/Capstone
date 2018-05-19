@@ -5,10 +5,25 @@ append styles
 block body
 	+navbar-fixed("Experience Summer Work USA","navbar","inverse")
 		+nav_item("#","active") Home
-		+nav_item("/student") Profile
-		+nav_item("#") Application
-		+nav_item("/jobList") Job List
-		+nav_item("/listUsers") User List (Administrators)
+		+nav_item(profileView) Profile
+
+		if (profileRole === 1)  
+			+nav_item('/sponsor_docs/listDocs') Documents
+
+		+nav_item("#") Documents
+
+		if (profileRole === 3)
+			+nav_item("/listUsers") User List
+
+		if (profileRole === 3)
+			+nav_item("/student/listStudents") Student List
+
+		if (profileRole === 3)
+			+nav_item("/sponsor/listSponsors") Sponsor List
+
+		if (profileRole === 3)
+			+nav_item("/employer/listEmployers") Employer List
+
 		+nav_item("/logout") Logout
 	.container
 		.starter-template

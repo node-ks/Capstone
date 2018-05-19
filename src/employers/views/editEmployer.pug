@@ -11,6 +11,7 @@ style.
       .col-md-6.col-sm-6.col-xs-12
         form(action='/employer/editEmployer', method='POST')
           input(name='EmpId', type='hidden', value=EmpId)
+          input(name='redirectFlag', type='hidden', value=redirectFlag)
           .form-group
             label.control-label(for='name')
               | Employer Name

@@ -11,6 +11,7 @@ style.
       .col-md-6.col-sm-6.col-xs-12
         form(action='/facilitator/editFacilitator', method='POST')
           input(name='FacId', type='hidden', value=FacId)
+          input(name='redirectFlag', type='hidden', value=redirectFlag)
           .form-group
             label.control-label(for='name')
               | First Name

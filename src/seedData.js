@@ -5,7 +5,7 @@ const sponsorStore = require('./sponsors/stores')
 const employerStore = require('./employers/stores')
 const facilitatorStore = require('./facilitators/stores')
 const schoolStore = require('./schools/stores')
-const jobStore = require('./jobs/stores')
+//const jobStore = require('./jobs/stores')
 
 /** CREATE USERS */
 userStore.createUser({

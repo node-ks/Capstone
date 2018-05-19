@@ -2,7 +2,7 @@
 var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
-
+const userStore = require('../../users/stores')
 /* ===================== */
 /**      L O G I N       */
 /* ===================== */
@@ -192,8 +192,53 @@ router.post('/editSponsor', (req, res) => {
         Phone: req.body.Phone,
         Email: req.body.Email,
         })
-       .then((data) => {
+        .then((data) => {
+            console.dir(data)
+            let redirectFlag = Number(req.body.redirectFlag)
+            if (redirectFlag == 0) {
            res.redirect('/sponsor/listSponsors')
+           }
+           else if (redirectFlag == 1 ) {
+               res.redirect('/home')
+           }
+           else {
+            res.send('Unauthorized')
+           }
         })
 })
+
+/* ======================================================= */
+/**      E D I T    C U R R E N T    S P O N S O R S       */
+/* ======================================================= */
+
+/** Edit User */
+router.get('/editCurrentSponsor', (req,res) =>{
+    if (req.session_state.username) {
+        userStore.getUser(req.session_state.username).then(users => {
+            console.dir(users[0])
+            store.getSponsor(users[0].PersonId).then(data => {
+            if (data.length > 0) {
+                console.dir(data)
+                res.render(require.resolve('../views/editSponsor.pug'),
+                        {
+                            SpnId: data[0].SpnId,
+                            SpnName: data[0].SpnName,
+                            SpnAddress: data[0].SpnAddress,
+                            Phone: data[0].Phone,
+                            Email: data[0].Email,
+                            redirectFlag:1
+                        }) 
+            }
+            else {
+                res.send('Sponsor does not exist')
+            }
+        }) 
+    })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+    
+})
+
 module.exports = router

@@ -57,14 +57,13 @@ const knex = require('knex')(require('../../knexfile'))
 
   /** EDIT STUDENT*/
   // {StudId, Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}
-  function editStudent({Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}) {
+  function editStudent({StudId,Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}) {
 //      let { studId, Fname, Mname } = props
       //console.dir(props)
     return knex.table('STUDENT')
         .where({StudId:StudId})
         .update(
-            {Fname:Fname 
-            , 
+            {Fname:Fname, 
                 Mname:Mname,
                 Lname:Lname,
                 Gender:Gender,

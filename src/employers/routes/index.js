@@ -2,6 +2,7 @@
 var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
+const userStore = require('../../users/stores')
 
 /* ===================== */
 /**      L O G I N       */
@@ -196,8 +197,52 @@ router.post('/editEmployer', (req, res) => {
         Email: req.body.Email,
         Rep: req.body.Rep
         })
-       .then((data) => {
+        .then((data) => {
+            console.dir(data)
+            let redirectFlag = Number(req.body.redirectFlag)
+            if (redirectFlag == 0) {
            res.redirect('/employer/listEmployers')
+           }
+           else if (redirectFlag == 1 ) {
+               res.redirect('/home')
+           }
+           else {
+            res.send('Unauthorized')
+           }
         })
+})
+/* ========================================================= */
+/**      E D I T    C U R R E N T    E M P L O Y E R S       */
+/* ========================================================= */
+
+/** Edit Employer */
+router.get('/editCurrentEmployer', (req,res) =>{
+    if (req.session_state.username) {
+        userStore.getUser(req.session_state.username).then(users => {
+            console.dir(users[0])
+            store.getEmployer(users[0].PersonId).then(data => {
+            if (data.length > 0) {
+                console.dir(data)
+                res.render(require.resolve('../views/editEmployer.pug'),
+                        {
+                            EmpId: data[0].EmpId,
+                            EmpName: data[0].EmpName,
+                            EmpAddress: data[0].EmpAddress,
+                            Phone: data[0].Phone,
+                            Email: data[0].Email,
+                            Rep: data[0].Rep,
+                            redirectFlag:1
+                        }) 
+            }
+            else {
+                res.send('Employer does not exist')
+            }
+        }) 
+    })
+}
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+    
 })
 module.exports = router

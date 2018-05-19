@@ -11,6 +11,7 @@ style.
       .col-md-6.col-sm-6.col-xs-12
         form(action='/student/editStudent', method='POST')
           input(name='StudId', type='hidden', value=StudId)
+          input(name='redirectFlag', type='hidden', value=redirectFlag)
           .form-group
             label.control-label(for='name')
               | First Name
@@ -72,3 +73,11 @@ style.
             div
               button.btn.btn-primary(name='submit', type='submit')
                 | Submit
+            div
+              br
+              button.btn.btn-primary(name='submit', type='submit')
+                | View Sponsor Info
+              | &nbsp &nbsp
+              button.btn.btn-primary(name='submit', type='submit')
+                | View Job Info
+          

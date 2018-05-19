@@ -31,32 +31,23 @@ block body
 				br
 				br
 				br
-				h2.sub-header Students
+				h2.sub-header Sponsor Info
 				.table-responsive
 					table.table.table-striped
 						thead
 							tr
 								th #
-								th First Name
-								th Middle Name
-								th Last Name
-								th Gender
-								th Address
-								th D.O.B
+								th Sponsor
 								th Phone
-								th GPA
 								th Email
-								th School ID
-								th Sponsor ID
-								th Job ID
 								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
 								td= val.snum
-								td= val.Fname 
-								td= val.Mname
-								td= val.Lname
+								td= val.SpnName 
+								td= val.Phone
+								td= val.Email
 								td= val.Gender
 								td= val.StudAddress
 								td= val.Dob

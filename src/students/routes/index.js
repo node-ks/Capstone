@@ -2,7 +2,7 @@
 var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
-
+const userStore = require('../../users/stores')
 /* ===================== */
 /**      L O G I N       */
 /* ===================== */
@@ -186,13 +186,14 @@ router.get('/editStudent/:StudId', (req,res) =>{
                             Lname: data[0].Lname,
                             Gender: data[0].Gender,
                             StudAddress: data[0].StudAddress,
-                            Dob: data[0].Dob,
+                            Dob: data[0].Dob.toLocaleDateString(),
                             Phone: data[0].Phone,
                             Gpa: data[0].Gpa,
                             Email: data[0].Email,
                             SchoolId: data[0].SchoolId,
                             SponsorId: data[0].SchoolId,
-                            JobId: data[0].JobId
+                            JobId: data[0].JobId,
+                            redirectFlag:0
                         }) 
             }
             else {
@@ -226,7 +227,59 @@ router.post('/editStudent', (req, res) => {
         })
        .then((data) => {
             console.dir(data)
+            let redirectFlag = Number(req.body.redirectFlag)
+            if (redirectFlag == 0) {
            res.redirect('/student/listStudents')
+           }
+           else if (redirectFlag == 1 ) {
+               res.redirect('/home')
+           }
+           else {
+            res.send('Unauthorized')
+           }
         })
+    })
+/* ====================================================== */
+/**      E D I T    C U R R E N T    S T U D E N T        */
+/* ====================================================== */
+
+/** Edit student info for student user based on UserId and PersonId */
+router.get('/editCurrentStudent', (req,res) => {
+    if (req.session_state.username) {
+        userStore.getUser(req.session_state.username).then(users => {
+            console.dir(users[0])
+            store.getStudent(users[0].PersonId).then(data => {
+                if (data.length > 0) {
+                    console.dir(data)
+                    res.render(require.resolve('../views/editStudent.pug'),
+                            {
+                                StudId: data[0].StudId,
+                                Fname: data[0].Fname,
+                                Mname: data[0].Mname,
+                                Lname: data[0].Lname,
+                                Gender: data[0].Gender,
+                                StudAddress: data[0].StudAddress,
+                                Dob: data[0].Dob.toLocaleDateString(),
+                                Phone: data[0].Phone,
+                                Gpa: data[0].Gpa,
+                                Email: data[0].Email,
+                                SchoolId: data[0].SchoolId,
+                                SponsorId: data[0].SchoolId,
+                                JobId: data[0].JobId,
+                                redirectFlag:1
+                            }) 
+                }
+                else {
+                    res.send('Student does not exist')
+                }
+            })
+        })
+
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+    
 })
+
 module.exports = router
