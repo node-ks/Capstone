@@ -3,6 +3,7 @@ var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
 const userStore = require('../../users/stores')
+const sponsorDocStore = require('../../sponsor_docs/stores')
 
 /* ===================== */
 /**      L O G I N       */
@@ -65,7 +66,7 @@ router.get('/home', (req,res) => {
 
 /** GET route - listDocs */
 router.get('/listDocs', (req,res) => {
-    console.dir(req.session_state)
+    //console.dir(req.session_state)
     if (req.session_state.username) {
         store.getDocs(req.session_state.spnId).then(data => {
             data.map((val, index) => val.snum = index + 1)
@@ -92,7 +93,6 @@ router.get('/getDoc/:DocId', (req,res) =>{
     }
 })
 
-
 /* ============================================== */
 /**      C R E A T E   S P O N S O R    D O C S   */
 /* ============================================== */
@@ -100,7 +100,7 @@ router.get('/getDoc/:DocId', (req,res) =>{
 /** GET route */
 router.get('/createDoc', (req,res) => { 
     if (req.session_state.username) {
-        console.dir(req.session_state)
+        //console.dir(req.session_state)
         res.render(require.resolve('../views/createDoc.pug'),
         {
             SpnId: req.session_state.spnId

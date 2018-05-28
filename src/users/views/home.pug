@@ -4,29 +4,41 @@ append styles
 	link(href='./css/starter-template.css', rel='stylesheet')
 block body
 	+navbar-fixed("Experience Summer Work USA","navbar","inverse")
+
 		+nav_item("#","active") Home
 		+nav_item(profileView) Profile
 
+		if (profileRole === 0)
+			+nav_item("/student/listStudentDocs") Documents
+
 		if (profileRole === 1)  
 			+nav_item('/sponsor_docs/listDocs') Documents
-
-		+nav_item("#") Documents
-
+			+nav_item('/sponsor_docs/listDocs') Students
+		
+		if (profileRole === 2)  
+			+nav_item('/sponsor_docs/listDocs') Jobs
+			+nav_item('/sponsor_docs/listDocs') Employees
+			
 		if (profileRole === 3)
-			+nav_item("/listUsers") User List
-
-		if (profileRole === 3)
-			+nav_item("/student/listStudents") Student List
-
-		if (profileRole === 3)
-			+nav_item("/sponsor/listSponsors") Sponsor List
-
-		if (profileRole === 3)
-			+nav_item("/employer/listEmployers") Employer List
+			+nav_item("/listUsers") Users
+			+nav_item("/student/listStudents") Students
+			+nav_item("/sponsor/listSponsors") Sponsors
+			+nav_item("/employer/listEmployers") Employers
+			
 
 		+nav_item("/logout") Logout
 	.container
 		.starter-template
 			h1= welcome
 			p.lead
-				| Use the menu at the top to navigate to your destination
+				if (profileRole === 0)
+					| Welcome to the student portal
+
+				if (profileRole === 1)  
+					| Welcome to the sponsor portal
+
+				if (profileRole === 2)
+					| Welcome to the employer portal
+
+				if (profileRole === 3)
+					| Welcome to the facilitator portal

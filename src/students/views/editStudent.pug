@@ -73,11 +73,17 @@ style.
             div
               button.btn.btn-primary(name='submit', type='submit')
                 | Submit
+              | &nbsp &nbsp
+              a.btn.btn-primary(href='/home')
+                | Cancel  
             div
               br
-              button.btn.btn-primary(name='submit', type='submit')
+              a.btn.btn-primary(href='/sponsor/deleteSponsor/:SpnId')
                 | View Sponsor Info
               | &nbsp &nbsp
-              button.btn.btn-primary(name='submit', type='submit')
+              a.btn.btn-primary(href='/job/deleteJob/:JobId')
                 | View Job Info
+              | &nbsp &nbsp
+              a.btn.btn-primary(href='/job/deleteJob/:JobId')
+                | View Employer Info  
           

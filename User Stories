@@ -3,11 +3,11 @@ User Stories
 1. As a User, I need the ability to create an account, so that I can login. [X]
 2. As a User, I need the ability to access my profile, so that I can update it. [X]
 
-3. As a Sponsor, I need to specify the documents that I need, so that the students can supply them. []
-4. As a Sponsor, I need the ability to access the documents submitted by a student, so I can approve them. []
+3. As a Sponsor, I need to specify the documents that I need, so that the students can supply them. [X]
+4. As a Sponsor, I need the ability to access the documents submitted by a student, so I can approve them. [Y]
 
-5. As a Facilitator, I need to assign a Sponsor to a Student. []
-6. As a Student, I need to submit the required documents, so the Sponsor can see them.[]
+5. As a Facilitator, I need to assign a Sponsor to a Student. [Y]
+6. As a Student, I need to submit the required documents, so the Sponsor can see them.[X]
 
 7. As an Employer, I need the ability to create a Job, so that Students can apply for it.
 8. As a Student, I need to see the Jobs posted, so that I can apply for it and submit the required documents.

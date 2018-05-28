@@ -1,0 +1,52 @@
+// Special version of Bootstrap that only affects content wrapped in .bootstrap-iso
+link(rel='stylesheet', href='https://formden.com/static/cdn/bootstrap-iso.css')
+h1 Edit Your User Status
+// Inline CSS based on choices in "Settings" tab
+style.
+  .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}
+
+.bootstrap-iso
+  .container-fluid
+    .row
+      .col-md-6.col-sm-6.col-xs-12
+        form(action='/editUser', method='POST')
+          input(name='username', type='hidden', value=username)
+        h4.form-signin-heading= 'Username: ' + username
+        h4.form-signin-heading= 'Current Status: ' + active
+        h4.form-signin-heading= 'Role Requested: ' + rolerequested
+          .form-group
+            br
+            label.control-label(for='active')
+              | Enter A New Status ID: [ 0 ] = Inactive  [ 1 ] = Active
+              span.asteriskField
+                | &nbsp*
+            input#inputEmail.form-control(type='hidden', name='username', value=username, placeholder='Enter Existing Username')
+            input#name.form-control(name='active', type='text', value=active)
+          .form-group
+            div
+              br
+              button.btn.btn-primary(name='submit', type='submit')
+                | Submit
+              | &nbsp &nbsp
+              a.btn.btn-primary(href='/home')
+                | Cancel  
+
+
+
+extends ../../../node_modules/jade-bootstrap/_bootstrap.pug
+append styles
+  link(href='./css/login.css', rel='stylesheet')
+  head
+    title= title
+  body
+  .container
+    form.form-signin(action='/editUser', method='POST')
+      h2.form-signin-heading Edit User Information
+      h4.form-signin-heading= 'Username: ' + username
+      h4.form-signin-heading= 'Current Status: ' + active
+      h4.form-signin-heading= 'Role Requested: ' + rolerequested
+      label.sr-only(for='inputEmail') Student ID
+      input#inputEmail.form-control(type='hidden', name='username', value=username, placeholder='Enter Existing Username')
+      input#inputEmail.form-control(type='text', name='active', value='', placeholder='Enter A New Status ID: [ 0 ] = Inactive  [ 1 ] = Active')
+      button.btn.btn-lg.btn-primary.btn-block(type='submit', value='Save') Save
+      a(href='/listUsers') Cancel

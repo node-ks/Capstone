@@ -40,7 +40,6 @@ block body
 								th Sponsor
 								th Phone
 								th Email
-								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
@@ -49,15 +48,6 @@ block body
 								td= val.Phone
 								td= val.Email
 								td= val.Gender
-								td= val.StudAddress
-								td= val.Dob
-								td= val.Phone
-								td= val.Gpa
-								td= val.Email
-								td= val.SchoolId
-								td= val.SponsorId
-								td= val.JobId
-								td
 
 									a(href='/student/editStudent/'+val.StudId) Edit 
 									a(href='/student/deleteStudent/'+val.StudId) &nbsp Delete

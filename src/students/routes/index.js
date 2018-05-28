@@ -3,6 +3,11 @@ var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
 const userStore = require('../../users/stores')
+const docStore = require('../../sponsor_docs/stores')
+const studDocStore = require('../../student_docs/stores')
+var formidable = require('formidable')
+var fs = require('fs');
+
 /* ===================== */
 /**      L O G I N       */
 /* ===================== */
@@ -58,9 +63,9 @@ router.get('/home', (req,res) => {
     }
 })
 
-/* =========================== */
-/**      G E T   U S E R S     */
-/* =========================== */
+/* ================================= */
+/**      G E T   S T U D E N T S     */
+/* ================================= */
 
 /** GET route - listUsers */
 router.get('/listStudents', (req,res) => {
@@ -112,7 +117,7 @@ router.get('/createStudent', (req,res) => {
 
 /* POST route */
 router.post('/createStudent', (req, res) => {
-    console.log('POST method called')
+    //console.log('POST method called')
     store
         .createStudent({
             Fname: req.body.Fname,
@@ -264,7 +269,7 @@ router.get('/editCurrentStudent', (req,res) => {
                                 Gpa: data[0].Gpa,
                                 Email: data[0].Email,
                                 SchoolId: data[0].SchoolId,
-                                SponsorId: data[0].SchoolId,
+                                SponsorId: data[0].SponsorId,
                                 JobId: data[0].JobId,
                                 redirectFlag:1
                             }) 
@@ -281,5 +286,152 @@ router.get('/editCurrentStudent', (req,res) => {
     }
     
 })
+/* ================================================ */
+/**      V I E W    S T U D E N T     D O C S       */
+/* ================================================ */
+
+/** GET route - listDocs */
+router.get('/uploadDocs', (req,res) => {
+    //console.dir(req.session_state)
+    if (req.session_state.username) {
+        //console.dir(req.session_state)
+        docStore.getDocs(req.session_state.spnId).then(data => {
+
+            //console.dir(data)
+            data.map((val, index) => val.snum = index + 1)
+            
+            res.render(require.resolve('../views/docList.pug'),
+                {
+                    list:data
+            }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+}) 
+
+/** GET route - getDoc/:DocId */
+router.get('/getDoc/:DocId', (req,res) =>{
+    if (req.session_state.username) {
+        docStore.getDoc(req.params.DocId).then(data => {
+            // TODO: What is supposed to be here??
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+
+/* ========================================================== */
+/**      G E T    D O C S    B Y    S T U D E N T    ID       */
+/* ========================================================== */
+
+/** TODO: DELETE??? */
+
+/** GET route - listDocs */
+router.get('/listStudentDocs', (req,res) => {
+    //console.dir(req.session_state)
+    if (req.session_state.username) {
+        //console.log('/students/routes/listStudentDocs req.session_state.studId: ' +  req.session_state.studId)
+        store.getDocByStudentId(req.session_state.studId).then(docs => {
+            //console.log('Stud Docs')
+            console.dir(docs)
+            //console.log('req.session_state.studId: ' + req.session_state.studId)
+            docs.map((val, index) => val.snum = index + 1)
+            res.render(require.resolve('../views/docList.pug'),
+                        {
+                        list:docs
+                        }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+}) 
+
+/** GET route - getDoc/:DocId */
+router.get('/getDoc/:StudId', (req,res) =>{
+    if (req.session_state.username) {
+        store.getDocByStudentId(req.params.StudId).then(StudDocs => {
+            // TODO: What is supposed to be here??
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+
+/* ==================================================== */
+/**      U P L O A D    S T U D E N T    D O C S         */
+/* ==================================================== */
+
+router.get('/submitDoc/:DocId',  (req, res) => {
+    if (req.session_state.username) {
+    res.render(require.resolve('../views/uploadDoc.pug'),{
+        DocId:req.params.DocId
+    })
+    //req.params.DocId
+                    
+    //res.sendFile(path.resolve(__dirname + '../../views/submitDoc.pug'));
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+
+
+router.post('/uploadFile',  (req, res) => {
+    var form = new formidable.IncomingForm();
+    
+    //console.dir(req.fields)
+    form.parse(req,  function(err, fields, files) {
+        //console.log('calling createStudentDoc with :', files.upload.name, fields.DocId)
+        //console.dir(files.upload.name) 
+
+        studDocStore
+        .createStudentDoc({
+            DocId: fields.DocId,
+            StudId: req.session_state.studId,
+            SpnId: req.session_state.spnId,
+            FilePath: files.upload.name
+            })
+        .then(() => {
+            console.log('Callback from createStudentDoc.')
+            res.redirect('/student/listStudentDocs')
+        }).catch(ex => console.log("CreateStudentDoc failed. Error is ", ex.status ))
+    });
+
+    form.on('fileBegin',  (name, file) => {
+        file.path = (path.resolve(__dirname + '/uploads/' + file.name));
+
+        if (file.name == null) res.send('No files have been selected for uploading');
+    })
+    
+    form.on('file',  (name, file) => {
+        console.log('Uploaded ' + file.name);
+        //res.sendFile(path.resolve(__dirname + '../../views/docList.pug'));
+    }) 
+  })
+
+
+
+/* ==================================================== */
+/**      V I E W    S U B M I T T E D    F I L E        */
+/* ==================================================== */
+
+router.get('/viewFile/:FilePath',  (req, res) => {
+    if (req.params.FilePath && req.session_state.username){
+        console.log(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath))
+        fs.readFile(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath), (err, data) => {  
+            if (err) res.send('No files have been uploaded yet');
+              else {
+                res.sendFile(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath));
+              }
+              console.log('req.params.FilePath: ' + req.params.FilePath);
+            });
+    }
+});
+
 
 module.exports = router

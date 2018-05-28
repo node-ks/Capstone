@@ -10,19 +10,13 @@ block body
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
-				a.navbar-brand(href='#') Experience Summer Work USA
+				a.navbar-brand(href='/home') Experience Summer Work USA
 			#navbar.navbar-collapse.collapse
 				ul.nav.navbar-nav.navbar-right
 					li
-						a(href='#') Dashboard
+						a(href='/home') Home
 					li
-						a(href='#') Settings
-					li
-						a(href='#') Profile
-					li
-						a(href='#') Help
-				form.navbar-form.navbar-right
-					input.form-control(type='text', placeholder='Search...')
+						a(href='/logout') Logout
 	.container-fluid
 		.row
 			.col-xs-6.col-sm-2
@@ -40,6 +34,7 @@ block body
 								th Document Title
 								th Document Description
 								th Sponsor ID
+								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
@@ -47,6 +42,7 @@ block body
 								td= val.DocTitle 
 								td= val.DocDescr
 								td= val.SpnId
+								td
 
 									a(href='/sponsor_docs/editDoc/'+val.DocId)  Edit  
 									a(href='/sponsor_docs/deleteDoc/'+val.DocId) &nbsp Delete

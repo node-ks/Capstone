@@ -29,10 +29,10 @@ const knex = require('knex')(require('../../knexfile'))
   }
 
   function authenticate ({ username, password }) {
-    console.log(`Authenticating user ${username}`)
+    //console.log(`Authenticating user ${username}`)
     return knex('USER').where({ username })
       .then(([user]) => {
-        console.dir(user)
+        //console.dir(user)
         if (!user)  return { success: false }
         if (user.Active === 0) return {success: false}
         const { hash } = saltHashPassword({

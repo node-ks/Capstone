@@ -10,19 +10,13 @@ block body
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
-				a.navbar-brand(href='#') Experience Summer Work USA
+				a.navbar-brand(href='/home') Experience Summer Work USA
 			#navbar.navbar-collapse.collapse
 				ul.nav.navbar-nav.navbar-right
 					li
-						a(href='#') Dashboard
+						a(href='/home') Home
 					li
-						a(href='#') Settings
-					li
-						a(href='#') Profile
-					li
-						a(href='#') Help
-				form.navbar-form.navbar-right
-					input.form-control(type='text', placeholder='Search...')
+						a(href='/logout') Logout
 	.container-fluid
 		.row
 			.col-xs-6.col-sm-6
@@ -49,7 +43,9 @@ block body
 								td= val.Active
 								td= val.RoleRequested
 								td 
-									a(href='/editUser/'+val.UserName) Edit 
+									a(href='/editUser/'+val.UserName) Edit Status
+									|&nbsp &nbsp
 									a(href='/deleteUser/'+val.UserName) &nbsp Delete
+									|&nbsp &nbsp
 									a(href='/editUserRole/'+val.UserName) &nbsp Edit Role
 									

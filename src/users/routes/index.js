@@ -33,7 +33,7 @@ router.post('/login', (req, res) => {
             /** Get user role */
             if (req.session_state.username) {
                 store.getUser(req.session_state.username).then(users => {
-                    //console.dir(users[0])
+                    console.dir(users[0])
                     store.getRoleByUserId(users[0].UserId).then(UserRole => {
                         //console.log(UserRole)
                         req.session_state.roleId = UserRole[0].RoleId
@@ -42,6 +42,14 @@ router.post('/login', (req, res) => {
                             sponsorStore.getSponsor(users[0].PersonId).then(Sponsor =>{
                                 req.session_state.spnId = Sponsor[0].SpnId
                                 //console.dir(req.session_state)
+                                res.redirect('/home')
+                            })
+                        }
+                        else if (req.session_state.roleId === 0){
+                            studentStore.getStudent(users[0].PersonId).then(Student => {
+                                //console.dir(Student)
+                                req.session_state.spnId = Student[0].SponsorId
+                                req.session_state.studId = Student[0].StudId
                                 res.redirect('/home')
                             })
                         } 
@@ -79,7 +87,9 @@ router.get('/home', (req,res) => {
     if (req.session_state.username) {
         /**Sets edit profile option based on the type of user in the '/home' route for the 'PROFILE' button on the navbar  */
         let profileRole = req.session_state.roleId
-        console.log('Profile Role: '+profileRole)
+        let studId = req.session_state.studId
+
+        //console.log('Profile Role: ' + profileRole)
         //console.log(req.session_state.roleId)
         if (profileRole === 0) {
             profileView = '/student/editCurrentStudent'
@@ -98,7 +108,7 @@ router.get('/home', (req,res) => {
         } 
     res.render(require.resolve('../views/home.pug'),
         {
-            welcome: 'Welcome ' + req.session_state.username,
+            welcome: 'Hello ' + req.session_state.username + ',',
             profileRole:profileRole
         })
     }

@@ -6,6 +6,7 @@ const knex = require('knex')(require('../../knexfile'))
         createStudent:createStudent,
         getStudents: getStudents,
         getStudent:getStudent,
+        getDocByStudentId:getDocByStudentId,
         editStudent:editStudent,
         deleteStudent:deleteStudent
     }
@@ -54,7 +55,39 @@ const knex = require('knex')(require('../../knexfile'))
                         )
                 .where({StudId:StudId})
   }
+/** GET STUDENT SUBMITTED DOCS */
+function getDocByStudentId(StudId, SpnId) {
+  //console.log('/student/stores Stud ID: ' + StudId)
+  return knex.from('STUDENT')
+    .where({StudId:StudId})
+    .then(Student => {
+      //console.dir(Student)
+      return knex('SPONSOR_DOCS')
+      .where({SpnId:Student[0].SponsorId})
+      .then(SpnDocs => {
+        //console.log('Sponsor Logs')
+        //console.dir(SpnDocs)
+        return knex('STUDENT_DOCS')
+        .where({StudId:StudId})
+         .then(StudDocs => {
+          SpnDocs.map (SpnDoc => {
+            //console.dir(SpnDoc)
+            let foundDoc = StudDocs.find(StudDoc =>
+              StudDoc.DocId === SpnDoc.DocId)
 
+            if (foundDoc) 
+              SpnDoc.FilePath = foundDoc.FilePath
+              //console.log('SpnDoc')
+              //console.dir(SpnDoc)
+          })
+          //console.log('Spn Docs')
+          //console.dir(SpnDocs)
+          return SpnDocs  
+
+        }) 
+      })
+    })
+}
   /** EDIT STUDENT*/
   // {StudId, Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}
   function editStudent({StudId,Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}) {
