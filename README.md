@@ -1,2 +1,2 @@
-# node-js-database
-Setting up a MySQL database with Node.js
+# Experience Summer Work USA
+A web application for the J-1 Visa.
