@@ -6,13 +6,21 @@ const knex = require('knex')(require('../../knexfile'))
         createStudent:createStudent,
         getStudents: getStudents,
         getStudent:getStudent,
+        getStudentsBySponsorId:getStudentsBySponsorId,
         getDocByStudentId:getDocByStudentId,
+        getJobByStudentId:getJobByStudentId,
+        getJobDocByStudentId:getJobDocByStudentId,
         editStudent:editStudent,
-        deleteStudent:deleteStudent
+        deleteStudent:deleteStudent,
+        studentsForEmployer:studentsForEmployer,
+        studentByJob:studentByJob
     }
 
   function createStudent ({Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId }) {
-    console.log(`Add student ${Fname, Lname}`)
+    if (Dob === undefined){
+      Dob = new Date()
+    }
+    console.log(`Add student ${Fname, Lname, Dob}`)
     return knex('STUDENT').insert({
         Fname:Fname,
         Mname:Mname,
@@ -36,6 +44,16 @@ const knex = require('knex')(require('../../knexfile'))
     });
   }
 
+/** GET ALL STUDENTS BY SPONSOR ID */
+function getStudentsBySponsorId (sponsorId) {
+  return knex.from('STUDENT')
+  .where({SponsorId:sponsorId})
+  .then(function(data) {
+    var result = data //JSON.stringify(data);
+    return result;
+  });
+}
+
   /** GET SINGLE STUDENT */
   function getStudent (StudId) {
     return knex.from('STUDENT')
@@ -57,7 +75,7 @@ const knex = require('knex')(require('../../knexfile'))
   }
 /** GET STUDENT SUBMITTED DOCS */
 function getDocByStudentId(StudId, SpnId) {
-  //console.log('/student/stores Stud ID: ' + StudId)
+  console.log('/student/stores Stud ID: ' + StudId)
   return knex.from('STUDENT')
     .where({StudId:StudId})
     .then(Student => {
@@ -88,6 +106,61 @@ function getDocByStudentId(StudId, SpnId) {
       })
     })
 }
+
+/** GET EMPLOYER DOCS BY STUDENT ID */
+function getJobDocByStudentId(StudId) {
+  console.log('getJobDocByStudentId: ' + StudId)
+  return knex.from('STUDENT').innerJoin('JOB', 'STUDENT.JobId', 'JOB.JobId')
+  .where({StudId:StudId})
+  .then (studentJobs => studentJobs)
+
+}
+
+/** GET STUDENT INFO BY JOB ID */
+function getStudentByJobId(JobId) {
+  console.log('getStudentByJobId: ' + JobId)
+  return knex.from('STUDENT')
+  .where({JobId:JobId})
+  .then (student => student)
+}
+
+
+/** GET JOB BY STUDENT ID */
+function getJobByStudentId(studId) {
+return knex.from('STUDENT').innerJoin('JOB', 'STUDENT.JobId', 'JOB.JobId')
+  .then (studentJobs => studentJobs)
+}
+
+
+
+/** GET STUDENTS (EMPLOYEES) FOR EMPLOYERS BASED ON JOB ID PARAMETER */
+
+function studentsForEmployer(EmpId) {
+  return knex.from('STUDENT').innerJoin('JOB', 'STUDENT.JobId', 'JOB.JobId')
+  .then (employees => employees)
+  //console.dir(employees)
+}
+
+/** GET STUDENTS BY JOB */
+
+function studentByJob(jobId) {
+  console.log('jobId: ',jobId)
+  return knex.from('STUDENT')
+                .select('StudId',
+                'Fname',
+                'Mname',
+                'Lname',
+                'Gender',
+                'StudAddress',
+                'Dob',
+                'Phone',
+                'Email',
+                'SponsorId',
+                'JobId'
+                )
+              .where({JobId:jobId})
+}
+
   /** EDIT STUDENT*/
   // {StudId, Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}
   function editStudent({StudId,Fname, Mname, Lname, Gender, StudAddress, Dob, Phone, Gpa, Email, SchoolId, SponsorId, JobId}) {
@@ -105,7 +178,9 @@ function getDocByStudentId(StudId, SpnId) {
                 Phone:Phone,
                 Gpa:Gpa,
                 Email:Email,
-                SchoolId:SchoolId 
+                SchoolId:SchoolId,
+                SponsorId:SponsorId,
+                JobId:JobId
             }) 
         .then(data => data) 
   }

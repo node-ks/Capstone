@@ -45,6 +45,7 @@ block body
                                 
 									a(href='/student/viewFile/' + val.FilePath)  View
 									|&nbsp &nbsp
-									a(href='/student/submitDoc/' + val.DocId) &nbsp Upload
+									if (profileRole === 3 || profileRole === 0)
+										a(href='/student/submitDoc/' + val.DocId) &nbsp Upload
 				
 									

@@ -3,6 +3,7 @@ var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
 const userStore = require('../../users/stores')
+const jobStore = require('../../jobs/stores')
 
 /* ===================== */
 /**      L O G I N       */
@@ -92,6 +93,25 @@ router.get('/getFacilitator/:FacId', (req,res) =>{
     }
 })
 
+/* ====================================================== */
+/**      G E T   J O B    B Y    E M P L O Y E R    I D   */
+/* ====================================================== */
+
+/** Gets Job by Employer ID when */
+router.get('/getEmployerJob/:EmpId', (req,res) =>{
+    if (req.session_state.username) {
+        jobStore.getJobByEmployerId(req.params.EmpId).then(data => {
+            data.map((val, index) => val.snum = index + 1)
+            res.render(require.resolve('../views/jobList.pug'),
+                        {
+                        list:data
+                        }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
 
 /* ============================================ */
 /**      C R E A T E   F A C I L I T A T O R S   */

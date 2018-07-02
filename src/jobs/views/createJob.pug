@@ -1,0 +1,61 @@
+// Special version of Bootstrap that only affects content wrapped in .bootstrap-iso
+link(rel='stylesheet', href='https://formden.com/static/cdn/bootstrap-iso.css')
+h1 Create A New Job
+h1= EmployerFlag
+h1= EmpId
+// Inline CSS based on choices in "Settings" tab
+style.
+  .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}
+
+.bootstrap-iso
+  .container-fluid
+    .row
+      .col-md-6.col-sm-6.col-xs-12
+        form(action='/job/createJob', enctype='multipart/form-data', method='post')
+
+          if (employerFlag == true)
+            .form-group
+              input#name.form-control(name='EmpId', type='hidden', value=EmpId)
+          else 
+            .form-group
+              label.control-label(for='name')
+                | Employer ID
+                span.asteriskField
+                  | *
+              input#name.form-control(name='EmpId', type='text', value=EmpId)
+
+          .form-group
+            label.control-label(for='name')
+              | Job Title
+            input#name.form-control(name='JobTitle', type='text')
+          .form-group
+            label.control-label(for='name')
+              | Job Description
+              span.asteriskField
+                | *
+            input#name.form-control(name='JobDescr', type='text')             
+          .form-group
+            label.control-label.requiredField(for='name')
+              | Location
+              span.asteriskField
+                | *
+            input#email.form-control(name='JobLocation', type='text')
+          .form-group
+            label.control-label.requiredField(for='name')
+              | Pay Rate
+              span.asteriskField
+                | 
+            input#email.form-control(name='PayRate', type='text')
+          .form-group
+            label.control-label(for='name')
+              | Job Application
+              span.asteriskField
+                | *
+            input#name.form-control(type='file', name='upload', multiple='')
+          .form-group
+            div
+              button.btn.btn-primary(name='submit', type='submit')
+                | Submit
+              | &nbsp &nbsp
+              a.btn.btn-primary(href='/home')
+                | Cancel

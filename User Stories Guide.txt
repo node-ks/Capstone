@@ -1,0 +1,57 @@
+User Story 1: As a User, I need the ability to create an account, so that I can login.
+
+    1. Create account with unique username.
+    2. Wait for account to be approved by facilitator.
+    3. Facilitator signs in Users -> Edit Status and sets status to 1[Active] and has to Edit Role to match the Role Requested.
+
+
+User Story 2: As a User, I need the ability to access my profile, so that I can update it.
+
+    1. User signs in with Username and Password and depending on the role assigned to them by the facilitator, 
+       they see their respective user portal. 
+    2. User can click on Profile and update their profile details
+
+
+User Story 3: As a Sponsor, I need to specify the documents that I need, so that the students can supply them.
+
+    1. Signed in as a sponsor, navigate to Documents -> Create New Document.
+    2. Give the document a title and a description on where to find it; example: URL to the document.
+
+
+User Story 4: As a Sponsor, I need the ability to access the documents submitted by a student, so I can approve them.
+
+    1. Signed in as a sponsor, navigate to Students -> View Documents
+    2. Depending on the student and the document, clicking on View will open up the submission for that document if the student 
+       has uploaded a file.
+
+
+User Story 5: As a Facilitator, I need to assign a Sponsor to a Student.
+
+    1. Signed in as a facilitator, navigate to Students -> Edit
+    2. On the Edit Your Student Profile page, select a sponsor from the dropdown and then click Submit.
+
+
+User Story 6: As a Student, I need to submit the required documents, so the Sponsor can see them.
+
+    1. Signed in as a student, navigate to Sponsor Documents -> Upload.
+    2. Select a file from a local drive and click Submit to upload a file.
+
+
+User Story 7.1: As an Employer, I need the ability to create a job, so the Facilitator can see it.
+
+    1. Signed in as an employer, navigate to Jobs -> Create New Job
+    2. Fill out the job description and upload any necessary documents. 
+
+
+User Story 7.2: As a Facilitator, I need the ability to assign a job, so the student can see it.
+
+    1. 1. Signed in as a facilitator, navigate to Students -> Edit
+    2. On the Edit Your Student Profile page, select a job from the dropdown and then click Submit.
+
+
+User Story 8: As a Student, I need to see the job assigned to me, so that I can submit the required documents.
+
+    1. 
+
+
+User Story 9: As an Employer, I need the ability to access the documents submitted, so I can review them.

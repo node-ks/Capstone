@@ -4,18 +4,13 @@ User Stories
 2. As a User, I need the ability to access my profile, so that I can update it. [X]
 
 3. As a Sponsor, I need to specify the documents that I need, so that the students can supply them. [X]
-4. As a Sponsor, I need the ability to access the documents submitted by a student, so I can approve them. [Y]
+4. As a Sponsor, I need the ability to access the documents submitted by a student, so I can approve them. [X]
 
-5. As a Facilitator, I need to assign a Sponsor to a Student. [Y]
+5. As a Facilitator, I need to assign a Sponsor to a Student. [X]
 6. As a Student, I need to submit the required documents, so the Sponsor can see them.[X]
 
-7. As an Employer, I need the ability to create a Job, so that Students can apply for it.
-8. As a Student, I need to see the Jobs posted, so that I can apply for it and submit the required documents.
-9. As an Employer, I need the ability to review a Job application, so I can approve it.
+7.1 As an Employer, I need the ability to create a job, so the Facilitator can see it. [X]
+7.2 As a Facilitator, I need the ability to assign a job, so the student can see it. [X]
 
-10. As a Student, I need the ability to submit visa documents, so the Facilitator can access them.
-11. As a Facilitator, I need the ability to access the visa documents of a student, so I can update the program status.
-
-------
-User Story 1:
-
+8. As a Student, I need to see the job assigned to me, so that I can submit the required documents. [X]
+9. As an Employer, I need the ability to access the documents submitted, so I can review them. []

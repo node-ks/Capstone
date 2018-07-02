@@ -35,26 +35,35 @@ router.post('/login', (req, res) => {
                 store.getUser(req.session_state.username).then(users => {
                     console.dir(users[0])
                     store.getRoleByUserId(users[0].UserId).then(UserRole => {
-                        //console.log(UserRole)
+                        console.log(UserRole)
                         req.session_state.roleId = UserRole[0].RoleId
-                        //console.log(req.session_state.roleId)
-                        if (req.session_state.roleId === 1){
+                        console.log('Role ID in session:', req.session_state.roleId)
+                        if (UserRole[0].RoleId === 1){
                             sponsorStore.getSponsor(users[0].PersonId).then(Sponsor =>{
                                 req.session_state.spnId = Sponsor[0].SpnId
                                 //console.dir(req.session_state)
                                 res.redirect('/home')
                             })
                         }
-                        else if (req.session_state.roleId === 0){
+                        else if (UserRole[0].RoleId === 0){
                             studentStore.getStudent(users[0].PersonId).then(Student => {
                                 //console.dir(Student)
                                 req.session_state.spnId = Student[0].SponsorId
                                 req.session_state.studId = Student[0].StudId
                                 res.redirect('/home')
+                            })    
+                        } 
+                        else if (UserRole[0].RoleId === 2){
+                            employerStore.getEmployer(users[0].PersonId).then(Employer => {
+                                //console.dir(Student)
+                                req.session_state.PersonId = Employer[0].EmpId
+                                //req.session_state.studId = Student[0].StudId
+                                res.redirect('/home')
                             })
+                        
                         } 
                     else {   
-                    res.redirect('/home')
+                        res.redirect('/home')
                     }
                     })
                 })
@@ -89,7 +98,7 @@ router.get('/home', (req,res) => {
         let profileRole = req.session_state.roleId
         let studId = req.session_state.studId
 
-        //console.log('Profile Role: ' + profileRole)
+        console.log('Profile Role: ' + profileRole)
         //console.log(req.session_state.roleId)
         if (profileRole === 0) {
             profileView = '/student/editCurrentStudent'

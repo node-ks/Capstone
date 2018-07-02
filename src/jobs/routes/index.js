@@ -2,6 +2,8 @@
 var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
+var formidable = require('formidable')
+var fs = require('fs');
 
 /* ===================== */
 /**      L O G I N       */
@@ -91,7 +93,6 @@ router.get('/getJob/:JobId', (req,res) =>{
     }
 })
 
-
 /* ============================= */
 /**      C R E A T E   J O B S   */
 /* ============================= */
@@ -99,7 +100,18 @@ router.get('/getJob/:JobId', (req,res) =>{
 /** GET route */
 router.get('/createJob', (req,res) => { 
     if (req.session_state.username) {
+        //Check if current role is employer, if yes set a flag and pass it to pug
+        let employerFlag = false;
+        let employerId = 0;
+        if (req.session_state.roleId === 2){
+                employerFlag = true;
+                employerId = req.session_state.PersonId
+        }
         res.render(require.resolve('../views/createJob.pug'),
+            {
+                EmployerFlag:employerFlag,
+                EmpId:employerId
+            }
         )   
     }
     else {
@@ -109,17 +121,38 @@ router.get('/createJob', (req,res) => {
 
 /* POST route */
 router.post('/createJob', (req, res) => {
-    //console.log('POST method called')
-    store
-        .createJob({
-            EmpId: req.body.EmpId,
-            JobTitle: req.body.JobTitle,
-            JobDescr: req.body.JobDescr,
-            Location: req.body.JobLocation,
-            PayRate: req.body.Phone,
-            Status: req.body.Status
-            })
-        .then(() => res.redirect('/job/listJobs'))
+    
+        var form = new formidable.IncomingForm();
+        var fileName = '';
+        form.parse(req,  function(err, fields, files) {
+        //console.log('calling createStudentDoc with :', files.upload.name, fields.DocId)
+            //console.dir(fileName) 
+
+             store
+            .createJob({
+                EmpId: fields.EmpId,
+                JobTitle: fields.JobTitle,
+                JobDescr: fields.JobDescr,
+                JobLocation: fields.JobLocation,
+                PayRate: fields.PayRate,
+                FilePath: files.upload.name
+                })
+            .then(() => {
+                console.log('Callback from createJob.')
+                res.redirect('/home')
+            }).catch(ex => console.log("CreateJob failed. Error is ", ex.status )) 
+        });
+        
+        form.on('fileBegin',  (name, file) => {
+            file.path = (path.resolve(__dirname + '/uploads/' + file.name));
+
+        if (file.name == null) res.send('No files have been selected for uploading');
+        })
+    
+        form.on('file',  (name, file) => {
+            console.log('Uploaded ' + file.name);
+        //res.sendFile(path.resolve(__dirname + '../../views/docList.pug'));
+        }) 
 })
 
 /* ============================= */
@@ -140,7 +173,7 @@ router.get('/deleteJob/:JobId', (req, res) => {
                             EmpId: data[0].EmpId,
                             JobTitle: data[0].JobTitle,
                             JobDescr: data[0].JobDescr,
-                            Location: data[0].JobLocation,
+                            JobLocation: data[0].JobLocation,
                             PayRate: data[0].PayRate,
                             Status: data[0].Status
                             }) 
@@ -169,6 +202,10 @@ router.post('/deleteJob', (req, res) => {
 /** Edit Job */
 router.get('/editJob/:JobId', (req,res) =>{
     if (req.session_state.username) {
+        let employerFlag = false;
+        if (req.session_state.roleId === 2){
+                employerFlag = true;
+        }
         store.getJob(req.params.JobId).then(data => {
             if (data.length > 0) {
                 res.render(require.resolve('../views/editJob.pug'),
@@ -177,9 +214,10 @@ router.get('/editJob/:JobId', (req,res) =>{
                             EmpId: data[0].EmpId,
                             JobTitle: data[0].JobTitle,
                             JobDescr: data[0].JobDescr,
-                            Location: data[0].JobLocation,
+                            JobLocation: data[0].JobLocation,
                             PayRate: data[0].PayRate,
-                            Status: data[0].Status
+                            Status: data[0].Status,
+                            employerFlag:employerFlag
                         }) 
             }
             else {
@@ -198,12 +236,31 @@ router.post('/editJob', (req, res) => {
         EmpId: req.body.EmpId,
         JobTitle: req.body.JobTitle,
         JobDescr: req.body.JobDescr,
-        Location: req.body.JobLocation,
+        JobLocation: req.body.JobLocation,
         PayRate: req.body.PayRate,
         Status: req.body.Status
         })
        .then((data) => {
-           res.redirect('/job/listJobs')
+           res.redirect('/employer/getJob')
         })
 })
+
+
+/* ================================================= */
+/**      V I E W    J O B    D O C    F I L E        */
+/* ================================================= */
+
+router.get('/viewFile/:FilePath',  (req, res) => {
+    if (req.params.FilePath && req.session_state.username){
+        console.log(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath))
+        fs.readFile(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath), (err, data) => {  
+            if (err) res.send('No files have been uploaded yet');
+              else {
+                res.sendFile(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath));
+              }
+              console.log('req.params.FilePath: ' + req.params.FilePath);
+            });
+    }
+});
+
 module.exports = router

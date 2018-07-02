@@ -1,9 +1,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const store = require('./store')
+//const store = require('./store')
 const app = express()
-var path = require('path')
-var formidable = require('formidable')
+//var path = require('path')
+//var formidable = require('formidable')
 
 const userRouter = require('./users/routes')
 const studentRouter = require('./students/routes')

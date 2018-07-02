@@ -3,6 +3,9 @@ var router = require('express').Router();
 var path    = require('path');
 const store = require('../stores')
 const userStore = require('../../users/stores')
+const jobStore = require('../../jobs/stores')
+const studentStore = require('../../students/stores')
+var fs = require('fs');
 
 /* ===================== */
 /**      L O G I N       */
@@ -60,10 +63,9 @@ router.get('/home', (req,res) => {
 })
 
 /* ================================= */
-/**      G E T   E M P L O Y E R S   */
+/**      G E T   E M P L O Y E E S   */
 /* ================================= */
 
-/** GET route - listEmployers */
 router.get('/listEmployers', (req,res) => {
 
     if (req.session_state.username) {
@@ -80,7 +82,7 @@ router.get('/listEmployers', (req,res) => {
     }
 }) 
 
-/** GET route - getEmployer/:EmpId */
+// GET route - getEmployer/:EmpId 
 router.get('/getEmployer/:EmpId', (req,res) =>{
     if (req.session_state.username) {
         store.getEmployer(req.params.EmpId).then(data => {
@@ -92,6 +94,112 @@ router.get('/getEmployer/:EmpId', (req,res) =>{
     }
 })
 
+
+
+/* ====================================================== */
+/**      G E T   E M P L O Y E E S   B Y   J O B   I D    */
+/* ====================================================== */
+
+/** */
+
+router.get('/listEmployee/:jobId', (req,res) => {
+
+    if (req.session_state.username) {
+        studentStore.studentByJob(req.params.jobId).then(employees => {
+            employees.map((val, index) => val.snum = index + 1)
+            res.render(require.resolve('../views/employeeList.pug'),
+                        {
+                        list:employees
+                        }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+}) 
+
+
+router.get('/getEmployer/:EmpId', (req,res) =>{
+    if (req.session_state.username) {
+        store.getEmployer(req.params.EmpId).then(data => {
+            // TODO: What is supposed to be here??
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+
+
+
+/* ===================================================== */
+/**      G E T   J O B S   B Y   E M P L O Y E R   I D   */
+/* ===================================================== */
+
+/** Gets Job by Employer ID */
+router.get('/getJob', (req,res) =>{
+    if (req.session_state.username) {
+        console.log(req.session_state.PersonId)
+        jobStore.getJobByEmployerId(req.session_state.PersonId).then(jobs => {
+            jobs.map((val, index) => val.snum = index + 1)
+            res.render(require.resolve('../views/jobList.pug'),
+                        {
+                        list:jobs
+                        }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+/** GET route - getJob/:JobId */
+router.get('/getJob/:JobId', (req,res) =>{
+    if (req.session_state.username) {
+        store.getJob(req.params.JobId).then(data => {
+            // TODO: What is supposed to be here??
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
+
+/* ================================================================ */
+/**      G E T    J O B   D E T A I L S    B Y    J O B    ID       */
+/* ================================================================ */
+
+/** GET route - listJob */
+router.get('/listJobDetails/:JobId', (req,res) => {
+    //console.dir(req.session_state)
+    if (req.session_state.username) {
+
+        store.getJobDetailsByJobId(req.params.JobId).then(details => {
+            //console.log('Job Details')
+            console.dir(details)
+            //console.log('req.session_state.studId: ' + req.session_state.studId)
+            details.map((val, index) => val.snum = index + 1)
+            res.render(require.resolve('../views/jobDetails.pug'),
+                        {
+                        list:details
+                        }) 
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+}) 
+
+/** GET route - getJobDetails/:JobId */
+router.get('/getJobDetails/:JobId', (req,res) =>{
+    if (req.session_state.username) {
+        store.getDocByStudentId(req.params.JobId).then(jobDetails => {
+            // TODO: What is supposed to be here??
+        })
+    }
+    else {
+        res.render(require.resolve('../views/loginError.pug'))
+    }
+})
 
 /* ====================================== */
 /**      C R E A T E   E M P L O Y E R S   */
@@ -245,4 +353,40 @@ router.get('/editCurrentEmployer', (req,res) =>{
     }
     
 })
+
+/* ============================================================================= */
+/**      V I E W    S U B M I T T E D   E M P L O Y E R   D O C   F I L E        */
+/* ============================================================================= */
+
+router.get('/viewJobFile/:FilePath',  (req, res) => {
+    if (req.params.FilePath && req.session_state.username){
+        console.log(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath))
+        fs.readFile(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath), (err, data) => {  
+            if (err) res.send('No files have been uploaded yet');
+              else {
+                res.sendFile(path.resolve('../Experience Summer Work USA/src/jobs/routes/uploads/' + req.params.FilePath));
+              }
+              console.log('req.params.FilePath: ' + req.params.FilePath);
+            });
+    }
+});
+
+/* ============================================================================= */
+/**      V I E W    S U B M I T T E D   E M P L O Y E R   D O C   F I L E        */
+/* ============================================================================= */
+
+router.get('/viewEmployeeSubmissionFile/:FilePath',  (req, res) => {
+    if (req.params.FilePath && req.session_state.username){
+        console.log(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath))
+        fs.readFile(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath), (err, data) => {  
+            if (err) res.send('No files have been uploaded yet');
+              else {
+                res.sendFile(path.resolve('../Experience Summer Work USA/src/students/routes/uploads/' + req.params.FilePath));
+              }
+              console.log('req.params.FilePath: ' + req.params.FilePath);
+            });
+    }
+});
+
+
 module.exports = router

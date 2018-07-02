@@ -36,6 +36,7 @@ block body
 								th Phone
 								th Email
 								th Representative Name
+								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
@@ -45,7 +46,9 @@ block body
 								td= val.Phone
 								td= val.Email
 								td= val.Rep
+								td
 
-									a(href='/employer/editEmployer/'+val.EmpId)  Edit  
-									a(href='/employer/deleteEmployer/'+val.EmpId) &nbsp Delete
+									a(href='/employer/editEmployer/'+val.EmpId)  [ Edit ]
+									a(href='/employer/deleteEmployer/'+val.EmpId) &nbsp [ Delete ]
+									a(href='/facilitator/getEmployerJob/'+val.EmpId) &nbsp [ View Jobs ]
 									

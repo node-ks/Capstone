@@ -44,6 +44,7 @@ block body
 								th Sponsor ID
 								th Job ID
 								th
+								th
 						tbody
 						each val in list.length ? list : ['There are no values']
 							tr
@@ -61,7 +62,10 @@ block body
 								td= val.SponsorId
 								td= val.JobId
 								td
-
-									a(href='/student/editStudent/'+val.StudId) Edit 
-									a(href='/student/deleteStudent/'+val.StudId) &nbsp Delete
+								td
+									if (profileRole === 3)
+										a(href='/student/editStudent/'+val.StudId)  [Edit] 
+										a(href='/student/deleteStudent/'+val.StudId) &nbsp [Delete]
+									a(href='/student/listStudentDocs/'+val.StudId) &nbsp View Docs
+									
 									

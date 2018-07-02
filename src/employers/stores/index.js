@@ -7,7 +7,8 @@ const knex = require('knex')(require('../../knexfile'))
         getEmployers: getEmployers,
         getEmployer:getEmployer,
         editEmployer:editEmployer,
-        deleteEmployer:deleteEmployer
+        deleteEmployer:deleteEmployer,
+        getJobDetailsByJobId:getJobDetailsByJobId
     }
 
   function createEmployer ({ EmpId, EmpName, EmpAddress, Phone, Email, Rep}) {
@@ -64,3 +65,10 @@ const knex = require('knex')(require('../../knexfile'))
         .del()
         .then(data => data)
   }
+  /** GET JOB DETAILS BY EMPLOYER ID */
+function getJobDetailsByJobId(JobId) {
+  //console.log('getJobDetailsByEmployerId: ' + EmpId)
+  return knex.from('JOB')
+  .where({JobId:JobId})
+  .then (jobDetails => jobDetails)
+}

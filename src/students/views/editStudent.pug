@@ -12,6 +12,23 @@ style.
         form(action='/student/editStudent', method='POST')
           input(name='StudId', type='hidden', value=StudId)
           input(name='redirectFlag', type='hidden', value=redirectFlag)
+          if (profileRole === 3)
+              .form-group
+              label.control-label.requiredField(for='Sponsor')
+                | Sponsor
+                span.asteriskField
+                  | *
+                  select.form-control(name='SponsorId')
+                    each val in sponsors.length ? sponsors : ['No sponsors']
+                      option(value=val.SpnId) #{val.SpnName}
+              .form-group
+              label.control-label.requiredField(for='Job')
+                | Job
+                span.asteriskField
+                  | *
+                  select.form-control(name='JobId')
+                    each val in jobs.length ? jobs : ['No jobs']
+                      option(value=val.JobId) #{val.JobTitle}
           .form-group
             label.control-label(for='name')
               | First Name
