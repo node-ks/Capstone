@@ -1,2 +1,2 @@
 # node-js-database
-Setting up a MySQL database with Node.js
+A web application for the J-1 Visa.
