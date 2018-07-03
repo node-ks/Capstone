@@ -6,13 +6,13 @@ const app = express()
 //var formidable = require('formidable')
 
 const userRouter = require('./users/routes')
-/* const studentRouter = require('./students/routes')
+const studentRouter = require('./students/routes')
 const sponsorRouter = require('./sponsors/routes')
 const employerRouter = require('./employers/routes')
 const facilitatorRouter = require('./facilitators/routes')
 const jobRouter = require('./jobs/routes')
 const schoolRouter = require('./schools/routes')
-const sponsorDocRouter = require('./sponsor_docs/routes') */
+const sponsorDocRouter = require('./sponsor_docs/routes') 
 
 const clientSessions = require("client-sessions");
 
@@ -31,13 +31,13 @@ app.use(clientSessions({
   app.use(bodyParser.urlencoded({extended: true}));
   
 app.use('/', userRouter)
-/* app.use('/student', studentRouter)
+app.use('/student', studentRouter)
 app.use('/sponsor', sponsorRouter)
 app.use('/employer', employerRouter)
 app.use('/facilitator', facilitatorRouter)
 app.use('/job', jobRouter)
 app.use('/school', schoolRouter)
-app.use('/sponsor_docs', sponsorDocRouter) */
+app.use('/sponsor_docs', sponsorDocRouter)
 
 app.use(express.static('public'))
 app.listen(7555, () => {
