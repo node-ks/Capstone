@@ -147,7 +147,7 @@ router.get('/getStudent/:username', (req,res) =>{
 /** GET route */
 router.get('/createStudent', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createStudent.pug'),
+        res.render(require.resolve('../views/createStudent.pug')
         )   
     }
     else {
