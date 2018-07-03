@@ -99,7 +99,7 @@ router.get('/getSchool/:SchId', (req,res) =>{
 /** GET route */
 router.get('/createSchool', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createSchool.pug'),
+        res.render(require.resolve('../views/createSchool.pug')
         )   
     }
     else {

@@ -208,7 +208,7 @@ router.get('/getJobDetails/:JobId', (req,res) =>{
 /** GET route */
 router.get('/createEmployer', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createEmployer.pug'),
+        res.render(require.resolve('../views/createEmployer.pug')
         )   
     }
     else {

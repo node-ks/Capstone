@@ -99,7 +99,7 @@ router.get('/getSponsor/:SpnId', (req,res) =>{
 /** GET route */
 router.get('/createSponsor', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createSponsor.pug'),
+        res.render(require.resolve('../views/createSponsor.pug')
         )   
     }
     else {
