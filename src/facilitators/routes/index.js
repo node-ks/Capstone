@@ -120,7 +120,7 @@ router.get('/getEmployerJob/:EmpId', (req,res) =>{
 /** GET route */
 router.get('/createFacilitator', (req,res) => { 
     if (req.session_state.username) {
-        res.render(require.resolve('../views/createFacilitator.pug'),
+        res.render(require.resolve('../views/createFacilitator.pug')
         )   
     }
     else {
