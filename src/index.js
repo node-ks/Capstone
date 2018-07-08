@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 //const store = require('./store')
 const app = express()
+require('dotenv')
 //var path = require('path')
 //var formidable = require('formidable')
 
@@ -40,6 +41,19 @@ app.use('/school', schoolRouter)
 app.use('/sponsor_docs', sponsorDocRouter)
 
 app.use(express.static('public'))
+
+
 app.listen(7555, () => {
+    
+    
+/*     const result = dotenv.config()
+ 
+    if (result.error) {
+        throw result.error
+    } */
+    
+    //console.log(result.parsed)
+    
+    console.dir(process.env)
     console.log('Server running on http://localhost:7555')
 })
